@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.djcps.library.mapper.UserMapper">
+	<!-- 插入注册用户数据 -->
+	<insert id="register"
+		parameterType="com.djcps.library.model.User"
+		keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO p_user(user_name,user_pwd,user_phone)
+		VALUES(#{user_name},#{user_pwd},#{user_phone})
+	</insert>
+	
+	 <!-- 登录功能的实现 -->
+	<select id="findUser"    resultType="com.djcps.library.model.User">
+       select * from p_user where user_phone = #{phone} and user_pwd =#{password} ;
+    </select>
+   
+   
+    <!-- 查询用户是否存在 -->
+    <select id="findUserByUserPhone" resultType="com.djcps.library.model.User" >
+       select * from p_user where user_phone = #{phone} ;
+    </select>
+	
+	<!-- 查询用户是否存在 -->
+    <select id="findUserById" resultType="com.djcps.library.model.User" >
+       select * from p_user where user_id = #{id} ;
+    </select>
+	
+	<update id="updateUser" parameterType="com.djcps.library.model.User" >
+	update p_user set user_name=#{user_name},user_pwd=#{user_pwd} where user_phone=#{user_phone}
+	</update>
+</mapper>

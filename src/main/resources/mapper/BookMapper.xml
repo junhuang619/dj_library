@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.djcps.library.mapper.BookMapper">
+
+	<resultMap type="Book" id="BookResultMap">
+		<id column="book_id" property="bookId" />
+		<result column="book_name" property="bookName" />
+		<result column="book_author" property="bookAuthor" />
+		<result column="book_publish" property="bookPublish" />
+		<result column="book_category" property="bookCategory" />
+		<result column="book_price" property="bookPrice" />
+		<result column="book_introduction" property="bookIntroduction" />
+		<result column="book_image" property="bookImage" />
+		<result column="book_date" property="bookDate" />
+	</resultMap>
+	<!-- 添加新书信息 -->
+	<insert id="addBook" parameterType="com.djcps.library.model.Book"
+		keyProperty="bookId" useGeneratedKeys="true"   >
+		INSERT INTO
+		book(book_name,book_author,book_publish,book_category,book_price,book_introduction,book_image)
+		VALUES(#{bookName},#{bookAuthor},#{bookPublish},#{bookCategory},#{bookPrice})
+	</insert>
+	
+	<!-- 查询并返回书籍list -->
+	 <select id="listbook" resultMap ="BookResultMap">
+	    select * from book 
+	 </select>
+	 
+	 <!-- 根据书籍id删除书籍 -->
+	 <delete id="delBookByid" parameterType="Integer">
+	    delete from book where book_id = #{bookId}
+	 </delete>
+	 
+	 <!-- 查询书籍总数 -->
+	 <select id="getBookTotalCounts" resultType="java.lang.Integer">
+	    select count(book_id) from book
+	 </select>
+	 
+	 <!-- 按照页数查询书籍信息 -->
+	 <select id="selectAllByCondition" resultMap="BookResultMap">
+	   select * from book limit ${pageIndex},${pageSize}
+	 </select>
+	 
+	 <!-- 按照书籍名称模糊查找书籍 -->
+	 <select id="findBookBybookName" resultMap ="BookResultMap">
+	   select * from book where book_name like '%${bookName}%'
+	 </select>
+	 
+	 <!-- 按照书籍上架日期查找最新上架书籍 -->
+	 <select id="findBookByTheOnsaleDate" resultMap ="BookResultMap">
+	   select * from book order by book_date desc
+	 </select>
+</mapper>

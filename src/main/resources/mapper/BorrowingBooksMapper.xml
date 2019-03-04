@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.djcps.library.mapper.BorrowingBooksMapper">
+   
+	<resultMap type="BorrowingBooks" id="BookBorrowResultMap">
+		<id column="id" property="id" />
+		<result column="user_id" property="userId" />
+		<result column="book_id" property="bookId" />
+		<result column="date" property="date" />
+        <result column="lastdate" property="lastdate" />
+        <result column="isreturn" property="isreturn" />
+	</resultMap>
+  
+   <!-- 插入借书数据 -->
+	<insert id="BorrowBook"
+		parameterType="com.djcps.library.model.BorrowingBooks"
+		keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO borrowingbooks(user_id,book_id,date,lastdate,isreturn)
+		VALUES(#{userId},#{bookId},#{date},#{lastdate},#{isreturn})
+	</insert>
+	
+	<!-- 更新借书数据 返还书籍-->
+	<update id="retunBook"  parameterType="Integer" >
+	    update borrowingbooks set isreturn=#{i} where id = #{brrowingbookid}
+	</update>
+	<!-- 查询所有借书记录 -->
+	<select id="selectAllByCondition" resultMap="BookBorrowResultMap">
+	   select * from borrowingbooks limit ${pageIndex},${pageSize}
+	</select>
+	
+	 <!-- 查询借书记录总数 -->
+	 <select id="getBorrowingTotalCount" resultType="java.lang.Integer">
+	    select count(*) from borrowingbooks
+	 </select>
+</mapper>
