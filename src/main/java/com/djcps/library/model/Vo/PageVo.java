@@ -10,7 +10,7 @@ public class PageVo {
 	private Integer pageSize; // 每一页有几个记录
 	private Integer totalPage; // 总共几页
 	private List<Book> Booklist; //
-	
+	private List<BorrowingBooks> borrowingBookslist; //
 	public PageVo(Integer pageIndex, Integer pageSize, Integer totalPage, List<Book> booklist,
 			List<BorrowingBooks> borrowingBookslist) {
 		super();
@@ -30,9 +30,7 @@ public class PageVo {
 	public String toString() {
 		return "PageVo [pageIndex=" + pageIndex + ", pageSize=" + pageSize + ", totalPage=" + totalPage + ", Booklist="
 				+ Booklist + ", borrowingBookslist=" + borrowingBookslist + "]";
-	}
-
-	private List<BorrowingBooks> borrowingBookslist; //
+	}	
 
 	public List<Book> getBooklist() {
 		return Booklist;

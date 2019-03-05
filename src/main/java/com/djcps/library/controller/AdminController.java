@@ -5,12 +5,18 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.djcps.library.common.RetResponse;
 import com.djcps.library.common.RetResult;
+import com.djcps.library.model.Book;
 import com.djcps.library.service.AdminService;
 
 @RestController()
@@ -18,7 +24,7 @@ import com.djcps.library.service.AdminService;
 public class AdminController {
 	@Autowired()
 	@Qualifier(value = "adminservice")
-	private AdminService adService;
+	private AdminService adminService;
 
 	/**
 	 * 判断admin用户名是否存在
@@ -29,7 +35,7 @@ public class AdminController {
 	@RequestMapping("/isAdminExist")
 	@ResponseBody
 	public RetResult<String> adminIsExist(@Param("adminName") String adminName) {
-		boolean b = adService.adminIsExist(adminName);
+		boolean b = adminService.adminIsExist(adminName);
 		if (b) {
 			return RetResponse.makeOKRsp();
 		} else {
@@ -43,25 +49,73 @@ public class AdminController {
 	@RequestMapping("/adminLogin")
 	@ResponseBody
 	public RetResult<String> adminLogin(@Param("adminName") String adminName, @Param("password") String password) {
-		boolean b = adService.adminLogin(adminName, password);
+		boolean b = adminService.adminLogin(adminName, password);
 		if (b) {
 			return RetResponse.makeOKRsp();
 		} else
 			return RetResponse.makeErrRsp("管理员登录失败！");
 	}
-     /**
-      * 管理员删除书籍
-      * @param request
-      * @return
-      */
+
+	/**
+	 * 管理员删除书籍
+	 * 
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping("/delBook")
 	public RetResult<String> delBook(HttpServletRequest request) {
 		String bookId = request.getParameter("bookId");
-		int row = adService.delBookByid(Integer.valueOf(bookId));
-		if(row>0){
+		int row = adminService.delBookByid(Integer.valueOf(bookId));
+		if (row > 0) {
 			return RetResponse.makeOKRsp();
 		}
 		return RetResponse.makeErrRsp("书籍删除失败");
 	}
 
+	/**
+	 * 返回管理员登录界面
+	 * 
+	 * @return
+	 */
+	@GetMapping("/adminLoginPage")
+	public ModelAndView adminLoginPage() {
+		ModelAndView mAndView = new ModelAndView();
+		mAndView.setViewName("adminLogin");
+		return mAndView;
+	}
+
+	/**
+	 * 添加书籍信息
+	 * 
+	 * @param file
+	 * @param request
+	 * @return
+	 */
+	@PostMapping("/addBook")
+	public RetResult<String> addBookMsg(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+		if (file.isEmpty()) {
+			return RetResponse.makeErrRsp("上传文件信息为空！");
+		}
+		int row = adminService.addBookMsg(file, request);
+		if (row == 0) {
+			return RetResponse.makeErrRsp("书籍信息保存失败！");
+		}
+		return RetResponse.makeOKRsp();
+	}
+
+	/**
+	 * 返回书籍信息
+	 * 
+	 * @param bookId
+	 * @return
+	 */
+	@RequestMapping("/returnBookmsg")
+	public RetResult<Book> returnBookMsg(Integer bookId) {
+		Book book = adminService.getBookMsg(bookId);
+		if (book == null) {
+			return RetResponse.makeErrRsp("书籍信息查找不存在");
+		}
+		return RetResponse.makeOKRsp(book);
+	}
+ 
 }

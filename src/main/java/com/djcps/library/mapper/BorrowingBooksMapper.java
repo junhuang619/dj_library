@@ -17,4 +17,8 @@ public interface BorrowingBooksMapper {
 	int retunBook( @Param(value="i")int i,@Param(value="brrowingbookid")Integer brrowingbookid);
 
 	int getBorrowingTotalCount();
+
+	BorrowingBooks getBorrowMsgByid(@Param("id")Integer id);
+
+	int updatelastdateByid(BorrowingBooks books);
 }

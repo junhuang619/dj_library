@@ -24,6 +24,16 @@ public interface BookMapper {
 
 	List<Book> findBookByTheOnsaleDate();
 
+	int getBookdateCount(@Param("bookId")Integer bookId);
+
+	int updateBookByid(@Param("bookId")Integer bookId,@Param("isBorrowed") int isBorrowed);
+
+	int getBookBorrowCountByid(Integer bookId);
+
+	int updateBookborrowCountByid(@Param("bookId")Integer bookId);
+
+	Book getBookMsgByid(Integer bookId);
+
 	
     
 	

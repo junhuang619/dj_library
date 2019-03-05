@@ -14,13 +14,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="book_introduction" property="bookIntroduction" />
 		<result column="book_image" property="bookImage" />
 		<result column="book_date" property="bookDate" />
+		<result column="isborrowedout" property="isborrowedout" />
+		<result column="dateCount" property="dateCount" />
+		<result column="borrowCount" property="borrowCount" /> 
 	</resultMap>
 	<!-- 添加新书信息 -->
 	<insert id="addBook" parameterType="com.djcps.library.model.Book"
 		keyProperty="bookId" useGeneratedKeys="true"   >
 		INSERT INTO
-		book(book_name,book_author,book_publish,book_category,book_price,book_introduction,book_image)
-		VALUES(#{bookName},#{bookAuthor},#{bookPublish},#{bookCategory},#{bookPrice})
+		book(book_name,book_author,book_publish,book_category,book_price,book_introduction,
+		book_image,book_date,isborrowedout,dateCount,borrowCount)
+		VALUES(#{bookName},#{bookAuthor},#{bookPublish},#{bookCategory},#{bookPrice},
+		#{bookIntroduction},#{bookImage},#{bookDate},#{isborrowedout},#{dateCount},#{borrowCount})
 	</insert>
 	
 	<!-- 查询并返回书籍list -->
@@ -52,4 +57,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 <select id="findBookByTheOnsaleDate" resultMap ="BookResultMap">
 	   select * from book order by book_date desc
 	 </select>
+	 
+	 <!-- 根据书籍id查询书籍借书多少天 -->
+	 <select id="getBookdateCount" resultType="java.lang.Integer">
+	 select dateCount from book where book_id = #{bookId}
+	 </select>
+	 
+	 <!-- 根据书籍id更新书籍借出状态 -->
+	 <update id="updateBookByid">
+	 update book set isborrowedout = #{isBorrowed} where book_id = #{bookId}
+	 </update>
+	 
+	 <!-- 根据id获取书籍借出次数 -->
+	 <select id="getBookBorrowCountByid" resultType="java.lang.Integer">
+	 select borrowCount from book where  book_id = #{bookId}
+	 </select>
+	 
+	 <!-- 根据id添加书籍续借次数 -->
+	 <update id="updateBookborrowCountByid">
+	 update book set borrowCount =borrowCount+1 where book_id = #{bookId};
+	 </update>
+	<!--  -->
+	<select id="getBookMsgByid"  resultMap ="BookResultMap">
+	select * from book where book_id = #{bookId}
+	</select>
 </mapper>

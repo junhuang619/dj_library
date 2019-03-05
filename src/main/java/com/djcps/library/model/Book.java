@@ -20,8 +20,38 @@ public class Book {
     private String bookImage;
     
     private Date bookDate;
+    
+    private Integer isborrowedout;
+    
+    private Integer dateCount;
+    
+    private Integer borrowCount;
 
-    public Date getBookDate() {
+    public Integer getIsborrowedout() {
+		return isborrowedout;
+	}
+
+	public void setIsborrowedout(Integer isborrowedout) {
+		this.isborrowedout = isborrowedout;
+	}
+
+	public Integer getDateCount() {
+		return dateCount;
+	}
+
+	public void setDateCount(Integer dateCount) {
+		this.dateCount = dateCount;
+	}
+
+	public Integer getBorrowCount() {
+		return borrowCount;
+	}
+
+	public void setBorrowCount(Integer borrowCount) {
+		this.borrowCount = borrowCount;
+	}
+
+	public Date getBookDate() {
 		return bookDate;
 	}
 

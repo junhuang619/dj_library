@@ -34,4 +34,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 <select id="getBorrowingTotalCount" resultType="java.lang.Integer">
 	    select count(*) from borrowingbooks
 	 </select>
+	 
+	 <!-- 根据id获取书籍借出信息 -->
+	 <select id="getBorrowMsgByid" resultMap="BookBorrowResultMap">
+	 select * from borrowingbooks where id =#{id}
+	 </select>
+	 <!-- 根据id更新借书记录 -->
+	 <update id="updatelastdateByid">
+	 update borrowingbooks set lastdate =#{lastdate},isreturn = 0 where id =#{id}
+	 </update>
 </mapper>

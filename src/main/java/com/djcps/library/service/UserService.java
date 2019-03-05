@@ -26,4 +26,6 @@ public interface UserService {
 	List<Book> findBookBybookName(String bookName);
 
 	List<Book> findBookByTheOnsaleDate();
+
+	int ContinueBorrowBook(Integer borrowBookid);
 }

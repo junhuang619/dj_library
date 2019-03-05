@@ -40,12 +40,10 @@ public class UserController {
 		user.setUser_phone(phone);
 		System.out.println(user);
 		int row = userService.registerUser(user);
-		ModelAndView modelAndView = new ModelAndView();
-		if (row > 0) {
-			modelAndView.setViewName("index");
-			return RetResponse.makeOKRsp();
+		if (row == 0) {
+			return RetResponse.makeErrRsp("用户注册失败！");		
 		}
-		return RetResponse.makeErrRsp("用户注册失败！");
+		return RetResponse.makeOKRsp();
 	}
 
 	/**
@@ -58,11 +56,11 @@ public class UserController {
 	public RetResult<String> userLogin(@Param("phone") Integer phone, @Param("password") String password,
 			HttpServletRequest request) {
 		User user = userService.userLogin(phone, password);
-		if (null != user) {
-			request.getSession().setAttribute("user", user);
-			return RetResponse.makeOKRsp();
+		if (null == user) {
+			return RetResponse.makeErrRsp("login failed");			
 		}
-		return RetResponse.makeErrRsp("login failed");
+		request.getSession().setAttribute("user", user);
+		return RetResponse.makeOKRsp();
 	}
 
 	/**
@@ -89,10 +87,10 @@ public class UserController {
 	public RetResult<String> updateUserByphone(@Param("userName") String userName, @Param("password") String password,
 			@Param("phone") Integer phone) {
 		int row = userService.updateuser(userName, password, phone);
-		if (row > 0) {
-			return RetResponse.makeOKRsp();
+		if (row == 0) {
+			return RetResponse.makeErrRsp("update user failed");			
 		}
-		return RetResponse.makeErrRsp("update user failed");
+		return RetResponse.makeOKRsp();
 	}
 
 	/**
@@ -133,10 +131,10 @@ public class UserController {
 	@RequestMapping("/borrowing")
 	public RetResult<String> UserBorrowBook(HttpServletRequest request) {
 		int row = userService.UserBorrowBook(request);
-		if (row > 0) {
-			return RetResponse.makeOKRsp();
+		if (row == 0) {
+			return RetResponse.makeErrRsp("failed");			
 		}
-		return RetResponse.makeErrRsp("failed");
+		return RetResponse.makeOKRsp();
 	}
 
 	/**
@@ -160,10 +158,24 @@ public class UserController {
 		String borrwingId = request.getParameter("brrowingId");
 		int isreturn = 1;
 		int row = userService.returnBook(Integer.valueOf(borrwingId), isreturn);
-		if (row != 0) {
-			RetResponse.makeOKRsp();
+		if (row == 0) {
+			return RetResponse.makeErrRsp("书籍归还失败");
+
 		}
-		return RetResponse.makeErrRsp("书籍归还失败");
+		return RetResponse.makeOKRsp();
+	}
+    /**
+     * 书籍续借
+     * @param borrowBookid
+     * @return
+     */
+	@RequestMapping("/ContinueBorrowBook")
+	public RetResult<String> ContinueBorrowBook(@Param("borrowBookid")Integer borrowBookid) {
+		int row = userService.ContinueBorrowBook(borrowBookid);
+		if (row == 0) {
+			RetResponse.makeErrRsp("续借失败！");
+		}
+		return RetResponse.makeOKRsp();
 	}
 
 	/**
@@ -185,15 +197,17 @@ public class UserController {
 		List<Book> list = userService.findBookBybookName(bookName);
 		return RetResponse.makeOKRsp(list);
 	}
+
 	/**
 	 * 按照书籍上架时间查询
+	 * 
 	 * @return
 	 */
 	@RequestMapping("/findBookByOnsaleDate")
-	public RetResult<List<Book>> findBookByTheOnSaleDate(){
+	public RetResult<List<Book>> findBookByTheOnSaleDate() {
 		List<Book> list = userService.findBookByTheOnsaleDate();
 		return RetResponse.makeOKRsp(list);
 	}
 	
-	
+
 }
