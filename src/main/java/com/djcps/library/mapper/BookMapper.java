@@ -10,6 +10,8 @@ import com.djcps.library.model.BorrowingBooks;
 public interface BookMapper {
 
 	int addBook(Book book);
+	
+	int updateBook(Book book);
 
 	List<Book> listbook();
 

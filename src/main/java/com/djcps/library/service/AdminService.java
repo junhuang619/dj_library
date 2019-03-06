@@ -15,7 +15,11 @@ public interface AdminService {
 	int delBookByid(Integer bookId);
 
 	int addBookMsg(MultipartFile file, HttpServletRequest request);
-
+	
 	Book getBookMsg(Integer bookId);
+
+	int updateBookMsg1(MultipartFile file, HttpServletRequest request);
+
+	int updateBookMsg2(HttpServletRequest request);
 
 }

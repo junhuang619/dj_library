@@ -68,14 +68,13 @@ public class AdminServiceImpl implements AdminService {
 	 */
 	@Override
 	public int addBookMsg(MultipartFile file, HttpServletRequest request) {
-		// TODO Auto-generated method stub
-
-		String filePath = "D:\\Eclipse_workspace\\demo\\src\\main\\resources\\static\\upload\\";
+		String filePath = "F:\\eclipse-workspace\\newworkspace\\dj-library-1\\src\\main\\resources\\static\\upload\\";
 		String bookname = request.getParameter("bookName");
 		String price = request.getParameter("price");
 		String desc = request.getParameter("desc");
 		String datecount = request.getParameter("datecount");
 		Book book = new Book();
+
 		book.setBookName(bookname);
 		book.setBookIntroduction(desc);
 		book.setDateCount(Integer.valueOf(datecount));
@@ -106,8 +105,56 @@ public class AdminServiceImpl implements AdminService {
 	 */
 	@Override
 	public Book getBookMsg(Integer bookId) {
-		// TODO Auto-generated method stub
 		return bookmapper.getBookMsgByid(bookId);
 	}
 
+	@Override
+	public int updateBookMsg1(MultipartFile file, HttpServletRequest request) {
+		String filePath = "F:\\eclipse-workspace\\newworkspace\\dj-library-1\\src\\main\\resources\\static\\upload\\";
+		String bookId = request.getParameter("bookId");
+		String bookname = request.getParameter("bookName");
+		String price = request.getParameter("price");
+		String desc = request.getParameter("desc");
+		String datecount = request.getParameter("datecount");
+		Book book = new Book();
+		book.setBookId(Integer.valueOf(bookId));
+		book.setBookName(bookname);
+		book.setBookIntroduction(desc);
+		book.setDateCount(Integer.valueOf(datecount));
+		book.setBookPrice(Double.valueOf(price));
+		// 获取文件名
+		String fileName = file.getOriginalFilename();
+		// 获取文件的后缀名,比如图片的jpeg,png
+		String suffixName = fileName.substring(fileName.lastIndexOf("."));
+
+		// 文件上传后的路径
+		fileName = UUID.randomUUID() + suffixName;
+		File dest = new File(filePath + fileName);
+		book.setBookImage(dest.getName());
+		try {
+			file.transferTo(dest);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return bookmapper.updateBook(book);
+	}
+
+
+	@Override
+	public int updateBookMsg2(HttpServletRequest request) {
+		String bookId = request.getParameter("bookId");
+		String bookname = request.getParameter("bookName");
+		String price = request.getParameter("price");
+		String desc = request.getParameter("desc");
+		String datecount = request.getParameter("datecount");
+		Book book = new Book();
+		book.setBookId(Integer.valueOf(bookId));
+		book.setBookName(bookname);
+		book.setBookIntroduction(desc);
+		book.setDateCount(Integer.valueOf(datecount));
+		book.setBookPrice(Double.valueOf(price));
+		return bookmapper.updateBook(book); 
+	}
 }

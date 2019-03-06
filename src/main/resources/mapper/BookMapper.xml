@@ -27,6 +27,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		VALUES(#{bookName},#{bookAuthor},#{bookPublish},#{bookCategory},#{bookPrice},
 		#{bookIntroduction},#{bookImage},#{bookDate},#{isborrowedout},#{dateCount},#{borrowCount})
 	</insert>
+	<!-- 更新书籍信息 -->
+	<update id="updateBook" parameterType="com.djcps.library.model.Book">
+		update book
+        <set>
+            <if test="bookName != null">book_name=#{bookName},</if>
+            <if test="bookAuthor != null">book_author=#{bookAuthor},</if>
+            <if test="bookPublish != null">book_publish=#{bookPublish},</if>
+            <if test="bookCategory != null">book_category=#{bookCategory},</if>
+            <if test="bookPrice != null">book_price=#{bookPrice},</if>
+            <if test="bookIntroduction != null">book_introduction=#{bookIntroduction},</if>
+            <if test="bookImage != null">book_image=#{bookImage},</if>
+            <if test="bookDate != null">book_date=#{bookDate},</if>
+            <if test="isborrowedout != null">isborrowedout=#{isborrowedout},</if>
+            <if test="dateCount != null">dateCount=#{dateCount},</if>
+            <if test="borrowCount != null">borrowCount=#{borrowCount}</if>
+        </set>
+        where book_id = #{bookId}
+	</update>
 	
 	<!-- 查询并返回书籍list -->
 	 <select id="listbook" resultMap ="BookResultMap">

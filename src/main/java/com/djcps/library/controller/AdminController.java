@@ -102,6 +102,18 @@ public class AdminController {
 		}
 		return RetResponse.makeOKRsp();
 	}
+	
+	@PostMapping("/updateBook")
+	public RetResult<String> updateBookMsg(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+		if (file.isEmpty()) {
+			return RetResponse.makeErrRsp("上传文件信息为空！");
+		}
+		int row = adminService.updateBookMsg1(file, request);
+		if (row == 0) {
+			return RetResponse.makeErrRsp("书籍信息保存失败！");
+		}
+		return RetResponse.makeOKRsp();
+	}
 
 	/**
 	 * 返回书籍信息
