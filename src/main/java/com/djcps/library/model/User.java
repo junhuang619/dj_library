@@ -1,51 +1,57 @@
 package com.djcps.library.model;
 
 
+/**
+ * @author djsxs
+ *
+ */
 public class User {
-	private Integer user_id;
-	private String user_name;
-	private String user_pwd;
-	private Integer user_phone;
+	private Integer userId;
+	private String userName;
+	private String userPwd;
+	private String userPhone;
 	
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public User(Integer user_id, String user_name, String user_pwd, Integer user_phone) {
-		super();
-		this.user_id = user_id;
-		this.user_name = user_name;
-		this.user_pwd = user_pwd;
-		this.user_phone = user_phone;
+
+	public Integer getUserId() {
+		return userId;
 	}
-	public Integer getUser_phone() {
-		return user_phone;
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
-	public void setUser_phone(Integer user_phone) {
-		this.user_phone = user_phone;
+
+	public String getUserName() {
+		return userName;
 	}
-	public Integer getUser_id() {
-		return user_id;
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-	public void setUser_id(Integer user_id) {
-		this.user_id = user_id;
+
+	public String getUserPwd() {
+		return userPwd;
 	}
-	public String getUser_name() {
-		return user_name;
+
+	public void setUserPwd(String userPwd) {
+		this.userPwd = userPwd;
 	}
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
+
+	public String getUserPhone() {
+		return userPhone;
 	}
-	public String getUser_pwd() {
-		return user_pwd;
+
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
 	}
-	public void setUser_pwd(String user_pwd) {
-		this.user_pwd = user_pwd;
-	}
+
 	@Override
 	public String toString() {
-		return "User [user_id=" + user_id + ", user_name=" + user_name + ", user_pwd=" + user_pwd + ", user_phone="
-				+ user_phone + "]";
+		return "User [userId=" + userId + ", userName=" + userName + ", userPwd=" + userPwd + ", userPhone=" + userPhone
+				+ "]";
 	}
 	
 	

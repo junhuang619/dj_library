@@ -2,6 +2,10 @@ package com.djcps.library.model;
 
 import java.util.Date;
 
+/**
+ * @author djsxs
+ *
+ */
 public class Book {
     private Integer bookId;
 

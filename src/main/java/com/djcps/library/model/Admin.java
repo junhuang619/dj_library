@@ -1,5 +1,9 @@
 package com.djcps.library.model;
 
+/**
+ * @author djsxs
+ *
+ */
 public class Admin {
     private Integer adminId;
 

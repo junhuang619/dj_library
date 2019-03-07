@@ -16,7 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.djcps.library.controller.AdminController;
-//@WebFilter(urlPatterns="/admin/*",filterName="loginfilter")
+/** @WebFilter(urlPatterns="/admin/*",filterName="loginfilter") **/
+/**
+ * @author djsxs
+ *
+ */
 public class Loginfilter implements Filter{
 	@Autowired
 	@Qualifier("admin")
@@ -35,7 +39,8 @@ public class Loginfilter implements Filter{
 		String adminname = request.getParameter("adminname");
 		String pwd = request.getParameter("password");
 		Object issucess = aController.adminLogin(adminname, pwd);
-		if(issucess.toString().equals("success")){	
+		String success = "success";
+		if(success.equals(issucess.toString())){	
 			arg2.doFilter(request, arg1);
 			request.getRequestDispatcher("admin/index").forward(request, arg1);		
 		}

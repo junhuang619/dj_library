@@ -2,18 +2,22 @@ package com.djcps.library.model;
 
 import java.util.Date;
 
+/**
+ * @author djsxs
+ *
+ */
 public class BorrowingBooks {
     private Integer id;
 
     private Integer userId;
 
     private Integer bookId;
-
-    private Date date;            //借书日期
-   
-    private Date lastdate;        //书籍还书截止日期
-    
-    private Integer isreturn;     //书籍归还状态   0未归还  1归还
+    /**借书日期*/
+    private Date date;            
+    /**书籍还书截止日期*/
+    private Date lastdate;        
+    /**书籍归还状态   0未归还  1归还	*/
+    private Integer isreturn;     
      
     public Integer getIsreturn() {
 		return isreturn;

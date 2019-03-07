@@ -2,6 +2,11 @@ package com.djcps.library.common;
 
 import com.djcps.library.constant.RetCode;
 
+/**
+ * @author djsxs
+ *
+ * @param <T>
+ */
 public class RetResult<T> {
 	 public int code;
 	 

@@ -17,6 +17,10 @@ import com.djcps.library.model.Book;
 import com.djcps.library.model.User;
 import com.djcps.library.service.UserService;
 
+/**
+ * @author djsxs
+ *
+ */
 @RestController
 @RequestMapping(value = "/user", method = { RequestMethod.GET, RequestMethod.POST })
 public class UserController {
@@ -33,12 +37,11 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/userRegister", method = RequestMethod.POST)
 	public RetResult<String> registerUser(@Param(value = "userName") String userName,
-			@Param(value = "password") String password, @Param(value = "phone") Integer phone) {
+			@Param(value = "password") String password, @Param(value = "phone") String phone) {
 		User user = new User();
-		user.setUser_name(userName);
-		user.setUser_pwd(password);
-		user.setUser_phone(phone);
-		System.out.println(user);
+		user.setUserName(userName);
+		user.setUserPwd(password);
+		user.setUserPhone(phone);
 		int row = userService.registerUser(user);
 		if (row == 0) {
 			return RetResponse.makeErrRsp("用户注册失败！");		
@@ -53,16 +56,16 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/userLogin", method = RequestMethod.POST)
-	public RetResult<String> userLogin(@Param("phone") Integer phone, @Param("password") String password,
+	public RetResult<String> userLogin(@Param("phone") String userPhone, 
+			@Param("password") String userPwd,
 			HttpServletRequest request) {
-		User user = userService.userLogin(phone, password);
+		User user = userService.userLogin(userPhone, userPwd);
 		if (null == user) {
 			return RetResponse.makeErrRsp("login failed");			
 		}
 		request.getSession().setAttribute("user", user);
 		return RetResponse.makeOKRsp();
 	}
-
 	/**
 	 * 返回个人信息页面
 	 * 
@@ -70,9 +73,8 @@ public class UserController {
 	 */
 	@RequestMapping("/userMessagePage")
 	public RetResult<User> userMessagePage(HttpServletRequest request) {
-		User session_user = (User) request.getSession().getAttribute("user");
-		User user = userService.findUserById(session_user.getUser_id());
-		// model.addAttribute("message_user", user);
+		User sessionUser = (User) request.getSession().getAttribute("user");
+		User user = userService.findUserById(sessionUser.getUserId());
 		return RetResponse.makeOKRsp(user);
 	}
 
@@ -85,7 +87,7 @@ public class UserController {
 	 */
 	@RequestMapping("/userSubmit")
 	public RetResult<String> updateUserByphone(@Param("userName") String userName, @Param("password") String password,
-			@Param("phone") Integer phone) {
+			@Param("phone") String phone) {
 		int row = userService.updateuser(userName, password, phone);
 		if (row == 0) {
 			return RetResponse.makeErrRsp("update user failed");			
@@ -114,7 +116,7 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping("/isUserExist")
-	public RetResult<String> isUserExist(@Param("phone") Integer phone) {
+	public RetResult<String> isUserExist(@Param("phone") String phone) {
 		User users = userService.findUserByUserPhone(phone);
 		if (null == users) {
 			return RetResponse.makeErrRsp("用户已存在");
@@ -129,8 +131,8 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping("/borrowing")
-	public RetResult<String> UserBorrowBook(HttpServletRequest request) {
-		int row = userService.UserBorrowBook(request);
+	public RetResult<String> userBorrowBook(HttpServletRequest request) {
+		int row = userService.userBorrowBook(request);
 		if (row == 0) {
 			return RetResponse.makeErrRsp("failed");			
 		}
@@ -169,9 +171,9 @@ public class UserController {
      * @param borrowBookid
      * @return
      */
-	@RequestMapping("/ContinueBorrowBook")
-	public RetResult<String> ContinueBorrowBook(@Param("borrowBookid")Integer borrowBookid) {
-		int row = userService.ContinueBorrowBook(borrowBookid);
+	@RequestMapping("/continueBorrowBook")
+	public RetResult<String> continueBorrowBook(@Param("borrowBookid")Integer borrowBookid) {
+		int row = userService.continueBorrowBook(borrowBookid);
 		if (row == 0) {
 			RetResponse.makeErrRsp("续借失败！");
 		}

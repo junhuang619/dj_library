@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<!-- 查询并返回书籍list -->
-	 <select id="listbook" resultMap ="BookResultMap">
+	 <select id="listBook" resultMap ="BookResultMap">
 	    select * from book 
 	 </select>
 	 

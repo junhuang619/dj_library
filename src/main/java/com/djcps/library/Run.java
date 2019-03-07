@@ -6,6 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.ComponentScan;
 
+/**
+ * @author djsxs
+ *
+ */
 @SpringBootApplication
 @MapperScan(value = "com.djcps.library.mapper")
 @ComponentScan(basePackages="com.djcps.library")

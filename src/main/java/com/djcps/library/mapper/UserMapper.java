@@ -4,16 +4,42 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.djcps.library.model.User;
+/**
+ * @author djsxs
+ *
+ */
 @Mapper
 public interface UserMapper {
+	/**注册账户
+	 * @param user
+	 * @return
+	 */
 	public int register(User user);
 
-	public User findUser(@Param(value="phone")Integer phone,@Param(value="password")String password);
+	/**登陆
+	 * @param phone
+	 * @param password
+	 * @return
+	 */
+	public User findUser(@Param(value="userPhone")String userPhone,
+			@Param(value="userPwd")String userPwd);
 
+	/**更新用户
+	 * @param user
+	 * @return
+	 */
 	public int updateUser(User user);
 
-	public User findUserByUserPhone(@Param(value="phone")Integer phone);
+	/**通过phone查找用户
+	 * @param phone
+	 * @return
+	 */
+	public User findUserByUserPhone(@Param(value="phone")String phone);
 
+	/**通过id查找用户
+	 * @param id
+	 * @return
+	 */
 	public User findUserById(@Param(value="id")Integer id);
 
 	

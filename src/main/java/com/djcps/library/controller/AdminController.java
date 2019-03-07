@@ -19,6 +19,10 @@ import com.djcps.library.common.RetResult;
 import com.djcps.library.model.Book;
 import com.djcps.library.service.AdminService;
 
+/**
+ * @author djsxs
+ *
+ */
 @RestController()
 @RequestMapping("/admin")
 public class AdminController {
@@ -52,8 +56,9 @@ public class AdminController {
 		boolean b = adminService.adminLogin(adminName, password);
 		if (b) {
 			return RetResponse.makeOKRsp();
-		} else
-			return RetResponse.makeErrRsp("管理员登录失败！");
+		}
+		return RetResponse.makeErrRsp("管理员登录失败！");
+
 	}
 
 	/**
@@ -108,7 +113,7 @@ public class AdminController {
 		if (file.isEmpty()) {
 			return RetResponse.makeErrRsp("上传文件信息为空！");
 		}
-		int row = adminService.updateBookMsg1(file, request);
+		int row = adminService.updateBookMsg(file, request);
 		if (row == 0) {
 			return RetResponse.makeErrRsp("书籍信息保存失败！");
 		}
