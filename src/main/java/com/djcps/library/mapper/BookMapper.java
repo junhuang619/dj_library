@@ -85,15 +85,9 @@ public interface BookMapper {
 	 * @return
 	 */
 	int updateBookborrowCountByid(@Param("bookId")Integer bookId);
-
 	/**通过bookId获取书籍信息
 	 * @param bookId
 	 * @return
 	 */
 	Book getBookMsgByid(Integer bookId);
-
-	
-    
-	
-  
 }

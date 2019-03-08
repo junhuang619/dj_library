@@ -26,7 +26,7 @@ public class PageVo {
 		this.pageIndex = pageIndex;
 		this.pageSize = pageSize;
 		this.totalPage = totalPage;
-		bookList = bookList;
+		this.bookList = bookList;
 		this.borrowingBookslist = borrowingBookslist;
 	}
 
@@ -46,7 +46,7 @@ public class PageVo {
 	}
 
 	public void setbookList(List<Book> bookList) {
-		bookList = bookList;
+		this.bookList = bookList;
 	}
 
 	public List<BorrowingBooks> getBorrowingBookslist() {

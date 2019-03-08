@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.djcps.library.mapper.AdminMapper;
@@ -49,7 +50,8 @@ public class AdminServiceImpl implements AdminService {
 	 */
 	@Override
 	public boolean adminLogin(String adminName, String password) {
-		Admin admin = adminMapper.adminLogin(adminName, password);
+		String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
+		Admin admin = adminMapper.adminLogin(adminName, md5Password);
 		boolean flag = false;
 		if (admin != null) {
 			flag = true;

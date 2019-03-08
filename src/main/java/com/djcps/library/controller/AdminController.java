@@ -46,7 +46,6 @@ public class AdminController {
 			return RetResponse.makeErrRsp("该用户名已存在");
 		}
 	}
-
 	/**
 	 * 管理员登录后台
 	 */

@@ -10,14 +10,14 @@ import com.djcps.library.mapper.BookMapper;
 import com.djcps.library.mapper.BorrowingBooksMapper;
 import com.djcps.library.model.BorrowingBooks;
 import com.djcps.library.model.vo.PageVo;
-import com.djcps.library.service.IBorrowingBooksRecordService;
+import com.djcps.library.service.BorrowingBooksRecordService;
 
 /**
  * @author djsxs
  *
  */
 @Service("IBorrowingBooksRecordService")
-public class IBorrowingBooksRecordServiceImpl implements IBorrowingBooksRecordService {
+public class BorrowingBooksRecordServiceImpl implements BorrowingBooksRecordService {
 	@Resource
 	private BookMapper bookMapper;
 

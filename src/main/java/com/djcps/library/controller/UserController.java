@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -56,8 +57,8 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/userLogin", method = RequestMethod.POST)
-	public RetResult<String> userLogin(@Param("phone") String userPhone, 
-			@Param("password") String userPwd,
+	public RetResult<String> userLogin(@RequestParam("phone") String userPhone, 
+			@RequestParam("password") String userPwd,
 			HttpServletRequest request) {
 		User user = userService.userLogin(userPhone, userPwd);
 		if (null == user) {

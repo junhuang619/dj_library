@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.djcps.library.common.RetResponse;
 import com.djcps.library.common.RetResult;
 import com.djcps.library.model.vo.PageVo;
-import com.djcps.library.service.IBorrowingBooksRecordService;
+import com.djcps.library.service.BorrowingBooksRecordService;
 
 import javax.annotation.Resource;
 
@@ -22,7 +22,7 @@ public class BorrowingController {
 
 	@Resource
 	@Qualifier("IBorrowingBooksRecordService")
-	private IBorrowingBooksRecordService borrowingBooksRecordService;
+	private BorrowingBooksRecordService borrowingBooksRecordService;
 
 	/**
 	 * 返回所有用户借书记录页面

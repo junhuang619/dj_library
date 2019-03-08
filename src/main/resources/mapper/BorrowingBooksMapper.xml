@@ -14,7 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
   
    <!-- 插入借书数据 -->
-	<insert id="BorrowBook"
+	<insert id="borrowBook"
 		parameterType="com.djcps.library.model.BorrowingBooks"
 		keyProperty="id" useGeneratedKeys="true">
 		INSERT INTO borrowingbooks(user_id,book_id,date,lastdate,isreturn)

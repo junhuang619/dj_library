@@ -6,7 +6,7 @@ import com.djcps.library.model.vo.PageVo;
  * @author djsxs
  *
  */
-public interface IBorrowingBooksRecordService {
+public interface BorrowingBooksRecordService {
 
 	/**根据页码查询所有借书记录
 	 * @param pageNum

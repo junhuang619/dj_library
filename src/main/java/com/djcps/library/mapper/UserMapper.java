@@ -16,9 +16,10 @@ public interface UserMapper {
 	 */
 	public int register(User user);
 
+	
 	/**登陆
-	 * @param phone
-	 * @param password
+	 * @param userPhone
+	 * @param userPwd
 	 * @return
 	 */
 	public User findUser(@Param(value="userPhone")String userPhone,
