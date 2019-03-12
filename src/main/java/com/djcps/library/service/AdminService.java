@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.djcps.library.model.Admin;
 import com.djcps.library.model.Book;
 
 /**
@@ -16,14 +17,14 @@ public interface AdminService {
 	 * @param adminName
 	 * @return
 	 */
-	boolean adminIsExist(String adminName);
+	boolean adminIsExist(String phone);
 
 	/**管理员登陆
 	 * @param adminName
 	 * @param password
 	 * @return
 	 */
-	boolean adminLogin(String adminName, String password);
+	Admin adminLogin(String phone, String password);
 
 	/**根据id删除书籍
 	 * @param bookId

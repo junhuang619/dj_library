@@ -14,12 +14,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 查询登录管理员名是否存在 -->
     <select id="adminIsExist" parameterType="string" resultMap="AdminResultMap" >
-       select * from p_admin where admin_name = #{adminName}  ;
+       select * from p_admin where admin_phone = #{phone}  ;
     </select>
 	
 	<!-- 查询登录管理员是否存在 -->
     <select id="adminLogin"   resultMap="AdminResultMap" >
-       select * from p_admin where admin_name = #{adminName} and admin_pwd=#{password}  ;
+       select * from p_admin where admin_phone = #{phone} and admin_pwd=#{password};
     </select>
 	
 </mapper>

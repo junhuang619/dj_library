@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.djcps.library.common.RetResponse;
 import com.djcps.library.common.RetResult;
+import com.djcps.library.model.Admin;
 import com.djcps.library.model.Book;
 import com.djcps.library.service.AdminService;
 
@@ -38,28 +39,29 @@ public class AdminController {
 	 */
 	@RequestMapping("/isAdminExist")
 	@ResponseBody
-	public RetResult<String> adminIsExist(@Param("adminName") String adminName) {
-		boolean b = adminService.adminIsExist(adminName);
+	public RetResult<String> adminIsExist(@RequestParam("phone") String phone) {
+		boolean b = adminService.adminIsExist(phone);
 		if (b) {
 			return RetResponse.makeOKRsp();
 		} else {
 			return RetResponse.makeErrRsp("该用户名已存在");
 		}
 	}
+
 	/**
 	 * 管理员登录后台
 	 */
 	@RequestMapping("/adminLogin")
 	@ResponseBody
-	public RetResult<String> adminLogin(@Param("adminName") String adminName, @Param("password") String password) {
-		boolean b = adminService.adminLogin(adminName, password);
-		if (b) {
-			return RetResponse.makeOKRsp();
+	public RetResult<String> adminLogin(@RequestParam("phone") String phone, @RequestParam("password") String password,
+			HttpServletRequest request) {
+		Admin admin = adminService.adminLogin(phone, password);
+		if (null == admin) {
+			return RetResponse.makeErrRsp("管理员登录失败！");
 		}
-		return RetResponse.makeErrRsp("管理员登录失败！");
-
+		request.getSession().setAttribute("admin", admin);
+		return RetResponse.makeOKRsp();
 	}
-
 	/**
 	 * 管理员删除书籍
 	 * 
@@ -70,10 +72,10 @@ public class AdminController {
 	public RetResult<String> delBook(HttpServletRequest request) {
 		String bookId = request.getParameter("bookId");
 		int row = adminService.delBookByid(Integer.valueOf(bookId));
-		if (row > 0) {
-			return RetResponse.makeOKRsp();
+		if (row == 0) {
+			return RetResponse.makeErrRsp("书籍删除失败");
 		}
-		return RetResponse.makeErrRsp("书籍删除失败");
+		return RetResponse.makeOKRsp();
 	}
 
 	/**
@@ -106,7 +108,7 @@ public class AdminController {
 		}
 		return RetResponse.makeOKRsp();
 	}
-	
+
 	@PostMapping("/updateBook")
 	public RetResult<String> updateBookMsg(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
 		if (file.isEmpty()) {
@@ -133,5 +135,5 @@ public class AdminController {
 		}
 		return RetResponse.makeOKRsp(book);
 	}
- 
+
 }

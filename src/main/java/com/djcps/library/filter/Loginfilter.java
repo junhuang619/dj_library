@@ -24,7 +24,7 @@ import com.djcps.library.controller.AdminController;
 public class Loginfilter implements Filter{
 	@Autowired
 	@Qualifier("admin")
-   private AdminController aController;
+   private AdminController adminController;
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
@@ -36,9 +36,9 @@ public class Loginfilter implements Filter{
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest)arg0;
 		HttpServletResponse response = (HttpServletResponse)arg1;
-		String adminname = request.getParameter("adminname");
+		String phone = request.getParameter("phone");
 		String pwd = request.getParameter("password");
-		Object issucess = aController.adminLogin(adminname, pwd);
+		Object issucess = adminController.adminLogin(phone, pwd, request);
 		String success = "success";
 		if(success.equals(issucess.toString())){	
 			arg2.doFilter(request, arg1);

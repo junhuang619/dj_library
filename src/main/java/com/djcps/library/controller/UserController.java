@@ -211,6 +211,4 @@ public class UserController {
 		List<Book> list = userService.findBookByTheOnsaleDate();
 		return RetResponse.makeOKRsp(list);
 	}
-	
-
 }

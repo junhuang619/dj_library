@@ -30,7 +30,6 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public List<Book> listbook() {
-		// TODO Auto-generated method stub
 		List<Book> list = bookMapper.listBook();
 		return list;
 	}
@@ -46,7 +45,7 @@ public class BookServiceImpl implements BookService {
 			pageIndex = 1;
 			pageSize = 8;
 		} else {
-			pageIndex = (pageNum - 1) * pageSize ;
+			pageIndex = (pageNum - 1) * pageSize;
 			pageSize = pageNum * 8;
 		}
 		if (bookTotalCounts > 0) {

@@ -16,13 +16,13 @@ public interface AdminMapper {
 	 * @param adminName
 	 * @return
 	 */
-	Admin adminIsExist(@Param("adminName")String adminName);
+	Admin adminIsExist(@Param("phone")String phone);
 
 	/**管理员登陆
 	 * @param adminName
 	 * @param password
 	 * @return
 	 */
-	Admin adminLogin(@Param("adminName")String adminName, @Param("password")String password);
+	Admin adminLogin(@Param("phone")String phone, @Param("password")String password);
  
 }

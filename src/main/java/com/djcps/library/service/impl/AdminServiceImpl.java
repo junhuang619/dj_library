@@ -9,6 +9,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,9 +37,9 @@ public class AdminServiceImpl implements AdminService {
 	 * 确认管理员登录名是否重复
 	 */
 	@Override
-	public boolean adminIsExist(String adminName) {
+	public boolean adminIsExist(String phone) {
 		// TODO Auto-generated method stub
-		Admin admin = adminMapper.adminIsExist(adminName);
+		Admin admin = adminMapper.adminIsExist(phone);
 		boolean flag = false;
 		if (admin != null) {
 			flag = true;
@@ -49,14 +51,9 @@ public class AdminServiceImpl implements AdminService {
 	 * 管理员登录
 	 */
 	@Override
-	public boolean adminLogin(String adminName, String password) {
-		String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
-		Admin admin = adminMapper.adminLogin(adminName, md5Password);
-		boolean flag = false;
-		if (admin != null) {
-			flag = true;
-		}
-		return flag;
+	public Admin adminLogin(String phone, String password) {
+		Admin admin = adminMapper.adminLogin(phone, password);
+		return admin;
 	}
 
 	/**
@@ -103,7 +100,6 @@ public class AdminServiceImpl implements AdminService {
 			e.printStackTrace();
 		}
 		return bookmapper.addBook(book);
-
 	}
 
 	/**
