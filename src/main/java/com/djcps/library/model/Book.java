@@ -36,6 +36,8 @@ public class Book implements Serializable{
     private Integer dateCount;
     
     private Integer borrowCount;
+    
+    private String barCode;
 
     public Integer getIsborrowedout() {
 		return isborrowedout;
@@ -132,4 +134,12 @@ public class Book implements Serializable{
     public void setBookIntroduction(String bookIntroduction) {
         this.bookIntroduction = bookIntroduction == null ? null : bookIntroduction.trim();
     }
+
+	public String getBarCode() {
+		return barCode;
+	}
+
+	public void setBarCode(String barCode) {
+		this.barCode = barCode;
+	}
 }

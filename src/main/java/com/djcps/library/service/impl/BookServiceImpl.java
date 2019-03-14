@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.djcps.library.mapper.BookMapper;
 import com.djcps.library.model.Book;
-import com.djcps.library.model.BorrowingBooks;
 import com.djcps.library.model.vo.PageVo;
 import com.djcps.library.service.BookService;
 
@@ -21,12 +20,7 @@ public class BookServiceImpl implements BookService {
 	@Autowired
 	private BookMapper bookMapper;
 
-	@Override
-	public int addBook(Book book) {
-		// TODO Auto-generated method stub
-		int row = bookMapper.addBook(book);
-		return row;
-	}
+	
 
 	@Override
 	public List<Book> listbook() {
@@ -54,9 +48,8 @@ public class BookServiceImpl implements BookService {
 		pageVo.setPageIndex(pageIndex);
 		pageVo.setTotalPage(totalPage);
 		pageVo.setPageSize(pageSize);
-		List<BorrowingBooks> list = bookMapper.selectAllByCondition(pageIndex, pageSize);
-		pageVo.setBorrowingBookslist(list);
+		List<Book> list = bookMapper.selectAllByCondition(pageIndex, pageSize);
+		pageVo.setBookList(list);
 		return pageVo;
 	}
-
 }

@@ -1,5 +1,7 @@
 package com.djcps.library.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -42,8 +44,26 @@ public interface UserMapper {
 	 * @return
 	 */
 	public User findUserById(@Param(value="id")Integer id);
+	
+	
+	/**得到用户总数
+	 * @return
+	 */
+	int getUserTotalCounts();
 
+	/**分页查询用户信息
+	 * @param pageIndex
+	 * @param pageSize
+	 * @return
+	 */
+	List<User> selectAllByCondition(@Param("pageIndex")int pageIndex,
+            @Param("pageSize") int pageSize);
 	
-	
-	
+	/**是否启动(禁用)用户操作
+	 * @param id
+	 * @param power
+	 * @return
+	 */
+	public int isAllowBorrowByid(@Param(value="userId")Integer id,@Param(value="power")Integer power);
+
 }

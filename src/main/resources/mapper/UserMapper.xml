@@ -8,13 +8,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="user_name" property="userName" />
 		<result column="user_pwd" property="userPwd" />
 		<result column="user_phone" property="userPhone" />
+		<result column="isallowborrow" property="isAllowBorrow" />
 	</resultMap>
 	<!-- 插入注册用户数据 -->
 	<insert id="register"
 		parameterType="com.djcps.library.model.User"
 		keyProperty="id" useGeneratedKeys="true">
-		INSERT INTO p_user(user_name,user_pwd,user_phone)
-		VALUES(#{userName},#{userPwd},#{userPhone})
+		INSERT INTO p_user(user_name,user_pwd,user_phone,isallowborrow)
+		VALUES(#{userName},#{userPwd},#{userPhone},#{isAllowBorrow})
 	</insert>
 	
 	 <!-- 登录功能的实现 -->
@@ -36,5 +37,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<update id="updateUser" parameterType="com.djcps.library.model.User" >
 	update p_user set user_name=#{userName},user_pwd=#{userPwd} where user_phone=#{userPhone}
+	</update>
+
+	<!-- 查询用户总数 -->
+	<select id="getUserTotalCounts" resultType="java.lang.Integer">
+		select count(user_id) from p_user
+	</select>
+	
+	<!-- 按照页数查询用户信息 -->
+	<select id="selectAllByCondition" resultMap="userResultMap">
+		select * from p_user limit ${pageIndex},${pageSize}
+	</select>
+	
+	<update id="isAllowBorrowByid" parameterType="Integer">
+		 update p_user set isallowborrow=#{power} where user_id = #{userId}
 	</update>
 </mapper>

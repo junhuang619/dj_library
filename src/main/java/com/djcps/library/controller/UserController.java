@@ -39,11 +39,7 @@ public class UserController {
 	@RequestMapping(value = "/userRegister", method = RequestMethod.POST)
 	public RetResult<String> registerUser(@Param(value = "userName") String userName,
 			@Param(value = "password") String password, @Param(value = "phone") String phone) {
-		User user = new User();
-		user.setUserName(userName);
-		user.setUserPwd(password);
-		user.setUserPhone(phone);
-		int row = userService.registerUser(user);
+		int row = userService.registerUser(userName,password,phone);
 		if (row == 0) {
 			return RetResponse.makeErrRsp("用户注册失败！");		
 		}
@@ -57,15 +53,14 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/userLogin", method = RequestMethod.POST)
-	public RetResult<String> userLogin(@RequestParam("phone") String userPhone, 
+	public RetResult<Object> userLogin(@RequestParam("phone") String userPhone, 
 			@RequestParam("password") String userPwd,
 			HttpServletRequest request) {
-		User user = userService.userLogin(userPhone, userPwd);
+		User user = userService.userLogin(userPhone, userPwd,request);
 		if (null == user) {
 			return RetResponse.makeErrRsp("login failed");			
 		}
-		request.getSession().setAttribute("user", user);
-		return RetResponse.makeOKRsp();
+		return RetResponse.makeOKRsp(user);
 	}
 	/**
 	 * 返回个人信息页面
@@ -173,10 +168,10 @@ public class UserController {
      * @return
      */
 	@RequestMapping("/continueBorrowBook")
-	public RetResult<String> continueBorrowBook(@Param("borrowBookid")Integer borrowBookid) {
-		int row = userService.continueBorrowBook(borrowBookid);
+	public RetResult<String> continueBorrowBook(HttpServletRequest request) {
+		int row = userService.continueBorrowBook(request);
 		if (row == 0) {
-			RetResponse.makeErrRsp("续借失败！");
+			return RetResponse.makeErrRsp("续借失败！");
 		}
 		return RetResponse.makeOKRsp();
 	}
@@ -210,5 +205,15 @@ public class UserController {
 	public RetResult<List<Book>> findBookByTheOnSaleDate() {
 		List<Book> list = userService.findBookByTheOnsaleDate();
 		return RetResponse.makeOKRsp(list);
+	}
+	
+	@RequestMapping("/findBookByOnRecently")
+	public RetResult<List<Book>> findBookByOnRecently() {
+		List<Book> list = userService.findBookByOnRecently();
+		return RetResponse.makeOKRsp(list);
+	}
+	
+	public User findUserByPhone(String phone) {
+		return userService.findUserByUserPhone(phone);
 	}
 }

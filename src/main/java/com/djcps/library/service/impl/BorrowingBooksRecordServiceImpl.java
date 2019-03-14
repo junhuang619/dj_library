@@ -16,7 +16,7 @@ import com.djcps.library.service.BorrowingBooksRecordService;
  * @author djsxs
  *
  */
-@Service("IBorrowingBooksRecordService")
+@Service("borrowingBooksRecordService")
 public class BorrowingBooksRecordServiceImpl implements BorrowingBooksRecordService {
 	@Resource
 	private BookMapper bookMapper;
@@ -26,7 +26,6 @@ public class BorrowingBooksRecordServiceImpl implements BorrowingBooksRecordServ
 
 	@Override
 	public PageVo selectAllBorrowingRecord(int pageNum) {
-		// TODO Auto-generated method stub
 		int borrowingTotalCounts = borrowingBooksMapper.getBorrowingTotalCount();
 		PageVo pageVo = new PageVo();
 		int pageSize = 8;

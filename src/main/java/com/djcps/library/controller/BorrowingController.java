@@ -16,12 +16,12 @@ import javax.annotation.Resource;
  * @author djsxs
  *
  */
-@RequestMapping("/Borrowing")
+@RequestMapping("/borrowing")
 @RestController
 public class BorrowingController {
 
 	@Resource
-	@Qualifier("IBorrowingBooksRecordService")
+	@Qualifier("borrowingBooksRecordService")
 	private BorrowingBooksRecordService borrowingBooksRecordService;
 
 	/**

@@ -14,17 +14,19 @@ import com.djcps.library.model.User;
 public interface UserService {
  
 	/**注册账户
-	 * @param user
+	 * @param userName
+	 * @param password
+	 * @param phone
 	 * @return
 	 */
-	int  registerUser(User user);
+	int  registerUser(String userName, String password, String phone);
 
 	/**用户登陆
 	 * @param phone
 	 * @param password
 	 * @return
 	 */
-	User userLogin(String phone, String password);
+	User userLogin(String phone, String password,HttpServletRequest request);
 
 	/**更新用户信息
 	 * @param userName
@@ -71,8 +73,13 @@ public interface UserService {
 	List<Book> findBookByTheOnsaleDate();
 
 	/**续借
-	 * @param borrowBookid
+	 * @param request
 	 * @return
 	 */
-	int continueBorrowBook(Integer borrowBookid);
+	int continueBorrowBook(HttpServletRequest request);
+	
+	/**查找最近几天上架书籍
+	 * @return
+	 */
+	List<Book> findBookByOnRecently();
 }

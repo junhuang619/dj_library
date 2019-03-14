@@ -1,8 +1,8 @@
 package com.djcps.library.controller;
 
+
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,16 +18,18 @@ import com.djcps.library.common.RetResponse;
 import com.djcps.library.common.RetResult;
 import com.djcps.library.model.Admin;
 import com.djcps.library.model.Book;
+import com.djcps.library.model.User;
+import com.djcps.library.model.vo.PageVo;
 import com.djcps.library.service.AdminService;
 
 /**
  * @author djsxs
  *
  */
-@RestController()
+@RestController
 @RequestMapping("/admin")
 public class AdminController {
-	@Autowired()
+	@Autowired
 	@Qualifier(value = "adminservice")
 	private AdminService adminService;
 
@@ -53,14 +55,13 @@ public class AdminController {
 	 */
 	@RequestMapping("/adminLogin")
 	@ResponseBody
-	public RetResult<String> adminLogin(@RequestParam("phone") String phone, @RequestParam("password") String password,
+	public RetResult<Object> adminLogin(@RequestParam("phone") String phone, @RequestParam("password") String password,
 			HttpServletRequest request) {
-		Admin admin = adminService.adminLogin(phone, password);
+		Admin admin = adminService.adminLogin(phone, password,request);
 		if (null == admin) {
 			return RetResponse.makeErrRsp("管理员登录失败！");
 		}
-		request.getSession().setAttribute("admin", admin);
-		return RetResponse.makeOKRsp();
+		return RetResponse.makeOKRsp(admin);
 	}
 	/**
 	 * 管理员删除书籍
@@ -134,6 +135,38 @@ public class AdminController {
 			return RetResponse.makeErrRsp("书籍信息查找不存在");
 		}
 		return RetResponse.makeOKRsp(book);
+	}
+	
+	@RequestMapping("/userList")
+	public RetResult<PageVo> userList(@RequestParam("pageNum") int pageNum){
+		PageVo pVo =adminService.selectAllUser(pageNum);
+		return RetResponse.makeOKRsp(pVo);
+	}
+	
+	@RequestMapping("/isAllowBorrow")
+	public RetResult<String> isAllowBorrow(@RequestParam("userId")Integer userId,@RequestParam("power")Integer power){
+		int row=adminService.isAllowBorrow(userId, power);
+		if (row==0) {
+			return RetResponse.makeErrRsp("用户禁用(启用)失败");
+		}
+		return RetResponse.makeOKRsp();
+	}
+	
+	@RequestMapping("/findBookByBarCode")
+	public RetResult<Book> findBookByBarCode(@RequestParam("barCode")String barCode){
+		Book book = adminService.findBookByBarCode(barCode);
+		if (book == null) {
+			return RetResponse.makeErrRsp("查询书籍失败");
+		}
+		return RetResponse.makeOKRsp(book);
+	}
+	
+	/**根据phone查询管理员信息
+	 * @param phone
+	 * @return
+	 */
+	public Admin findAdminByPhone(String phone){
+		return adminService.findAdminByPhone(phone);
 	}
 
 }

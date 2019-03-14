@@ -1,11 +1,11 @@
 package com.djcps.library.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.djcps.library.model.Book;
-import com.djcps.library.model.BorrowingBooks;
 
 /**
  * @author djsxs
@@ -46,7 +46,7 @@ public interface BookMapper {
 	 * @param pageSize
 	 * @return
 	 */
-	List<BorrowingBooks> selectAllByCondition(@Param("pageIndex")int pageIndex,
+	List<Book> selectAllByCondition(@Param("pageIndex")int pageIndex,
 			                                  @Param("pageSize") int pageSize);
 
 	/**通过书名查询书籍
@@ -90,4 +90,16 @@ public interface BookMapper {
 	 * @return
 	 */
 	Book getBookMsgByid(Integer bookId);
+	
+	/**查找最近几天上架书籍信息
+	 * @param date
+	 * @return
+	 */
+	List<Book> getBookOnRecently(@Param("date")Date date);
+	
+	/**根据条形码查找书籍信息
+	 * @param barCode
+	 * @return
+	 */
+	Book findBookByBarCode(@Param("barCode")String barCode);
 }

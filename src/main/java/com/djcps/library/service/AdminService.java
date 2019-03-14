@@ -1,11 +1,13 @@
 package com.djcps.library.service;
 
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import com.djcps.library.model.Admin;
 import com.djcps.library.model.Book;
+import com.djcps.library.model.vo.PageVo;
 
 /**
  * @author djsxs
@@ -14,17 +16,17 @@ import com.djcps.library.model.Book;
 public interface AdminService {
 
 	/**管理员账号是否存在
-	 * @param adminName
+	 * @param phone
 	 * @return
 	 */
 	boolean adminIsExist(String phone);
 
 	/**管理员登陆
-	 * @param adminName
+	 * @param phone
 	 * @param password
 	 * @return
 	 */
-	Admin adminLogin(String phone, String password);
+	Admin adminLogin(String phone, String password,HttpServletRequest request);
 
 	/**根据id删除书籍
 	 * @param bookId
@@ -52,5 +54,30 @@ public interface AdminService {
 	 */
 	int updateBookMsg(MultipartFile file, HttpServletRequest request);
 
+	
+	/**根据页数获取用户
+	 * @param pageNum
+	 * @return
+	 */
+	PageVo selectAllUser(int pageNum);
+	
+	/**是否启动(禁用)用户
+	 * @param id
+	 * @param power
+	 * @return
+	 */
+	int isAllowBorrow(Integer id,Integer power);
+	
+	/**通过手机查询管理员
+	 * @param phone
+	 * @return
+	 */
+	Admin findAdminByPhone(String phone);
+	
+	/**根据条形码查找书籍信息
+	 * @param barCode
+	 * @return
+	 */
+	Book findBookByBarCode(String barCode);
 
 }

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.DigestUtils;
@@ -39,8 +38,14 @@ public class UserServiceImpl implements UserService {
 
 	@Resource
 	private BorrowingBooksMapper borrowingBooksMapper;
+
 	@Override
-	public int registerUser(User user) {
+	public int registerUser(String userName, String password, String phone) {
+		User user = new User();
+		user.setUserName(userName);
+		user.setUserPwd(password);
+		user.setUserPhone(phone);
+		user.setIsAllowBorrow(1);
 		String md5Password = DigestUtils.md5DigestAsHex(user.getUserPwd().getBytes());
 		user.setUserPwd(md5Password);
 		int row = userMapper.register(user);
@@ -48,10 +53,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User userLogin(String userPhone, String userPwd) {
+	public User userLogin(String userPhone, String userPwd,HttpServletRequest request) {
 		String md5Password = DigestUtils.md5DigestAsHex(userPwd.getBytes());
 		User user = userMapper.findUser(userPhone, md5Password);
-		return user;
+		if (user==null) {
+			return null;
+		}else {
+			request.getSession().setAttribute("user", user);
+			return user;
+		}
+		
 	}
 
 	@Override
@@ -82,11 +93,18 @@ public class UserServiceImpl implements UserService {
 		// 获取前端传来的数据
 		String bookId = request.getParameter("bookId");
 		/**User user = (User) request.getSession().getAttribute("user");*/
+		// 测试代码  
+		User user=new User();
+		user.setIsAllowBorrow(1);
+		Integer isAllowBorrow = user.getIsAllowBorrow();
+		if (isAllowBorrow != 1) {
+			return 0;
+		}
 		BorrowingBooks books = new BorrowingBooks();
 		// 存储bookid
 		books.setBookId(Integer.valueOf(bookId));
 		// 存储用户id
-		/**books.setUserId(user.getUserId());*/
+		/** books.setUserId(user.getUserId()); */
 		// 改行为测试代码行
 		books.setUserId(1);
 		books.setIsreturn(0);
@@ -125,34 +143,54 @@ public class UserServiceImpl implements UserService {
 		}
 		return bookMapper.updateBookByid(books.getBookId(), isBorrowed);
 	}
-	
+
 	@Override
-	public int continueBorrowBook(Integer borrowBookid) {
-		BorrowingBooks books = borrowingBooksMapper.getBorrowMsgByid(borrowBookid);
-		Date newdate = new Date();
-		Calendar rightNow = Calendar.getInstance();
-		rightNow.setTime(newdate);
-		int datecount = bookMapper.getBookdateCount(books.getBookId());
-		rightNow.add(Calendar.DAY_OF_YEAR, datecount);
-		newdate = rightNow.getTime();
-		books.setLastdate(newdate);
-		int row = borrowingBooksMapper.updatelastdateByid(books);
-		if(row ==0){
+	public int continueBorrowBook(HttpServletRequest request) {
+		String borrowBookid=request.getParameter("borrowBookid");
+		/**User user = (User) request.getSession().getAttribute("user");*/
+		User user=new User();
+		user.setIsAllowBorrow(1);
+		Integer isAllowBorrow = user.getIsAllowBorrow();
+		if (isAllowBorrow != 1) {
 			return 0;
 		}
-		return bookMapper.updateBookborrowCountByid(books.getBookId());
+		BorrowingBooks borrowingBooks = borrowingBooksMapper.getBorrowMsgByid(Integer.valueOf(borrowBookid));
+		Date newdate = borrowingBooks.getLastdate();
+		Calendar rightNow = Calendar.getInstance();
+		rightNow.setTime(newdate);
+		int datecount = bookMapper.getBookdateCount(borrowingBooks.getBookId());
+		rightNow.add(Calendar.DAY_OF_YEAR, datecount);
+		newdate = rightNow.getTime();
+		borrowingBooks.setLastdate(newdate);
+		int row = borrowingBooksMapper.updatelastdateByid(borrowingBooks);
+		if (row == 0) {
+			return 0;
+		}
+		return bookMapper.updateBookborrowCountByid(borrowingBooks.getBookId());
 	}
 
 	@Override
 	public List<Book> findBookBybookName(String bookName) {
-		// TODO Auto-generated method stub
 		return bookMapper.findBookBybookName(bookName);
 	}
 
 	@Override
 	public List<Book> findBookByTheOnsaleDate() {
-		// TODO Auto-generated method stub
 		return bookMapper.findBookByTheOnsaleDate();
+	}
+
+	@Override
+	public List<Book> findBookByOnRecently() {
+		SimpleDateFormat formata = new SimpleDateFormat("yy-MM-dd");
+		Date date = new Date();
+		try {
+			date = formata.parse(formata.format(date));
+			System.out.println(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return bookMapper.getBookOnRecently(date);
 	}
 
 }

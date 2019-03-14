@@ -11,11 +11,6 @@ import com.djcps.library.model.vo.PageVo;
  */
 public interface BookService {
 
-	/**添加书籍
-	 * @param book
-	 * @return
-	 */
-	int addBook(Book book);
 
 	/**书籍集合
 	 * @return

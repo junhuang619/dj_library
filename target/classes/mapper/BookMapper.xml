@@ -16,87 +16,99 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="book_date" property="bookDate" />
 		<result column="isborrowedout" property="isborrowedout" />
 		<result column="dateCount" property="dateCount" />
-		<result column="borrowCount" property="borrowCount" /> 
+		<result column="borrowCount" property="borrowCount" />
+		<result column="barcode" property="barCode" />
 	</resultMap>
 	<!-- 添加新书信息 -->
-	<insert id="addBook" parameterType="com.djcps.library.model.Book"
-		keyProperty="bookId" useGeneratedKeys="true"   >
+	<insert id="addBook"
+		parameterType="com.djcps.library.model.Book" keyProperty="bookId"
+		useGeneratedKeys="true">
 		INSERT INTO
 		book(book_name,book_author,book_publish,book_category,book_price,book_introduction,
-		book_image,book_date,isborrowedout,dateCount,borrowCount)
+		book_image,book_date,isborrowedout,dateCount,borrowCount,barcode)
 		VALUES(#{bookName},#{bookAuthor},#{bookPublish},#{bookCategory},#{bookPrice},
-		#{bookIntroduction},#{bookImage},#{bookDate},#{isborrowedout},#{dateCount},#{borrowCount})
+		#{bookIntroduction},#{bookImage},#{bookDate},#{isborrowedout},#{dateCount},#{borrowCount},#{barCode})
 	</insert>
 	<!-- 更新书籍信息 -->
-	<update id="updateBook" parameterType="com.djcps.library.model.Book">
+	<update id="updateBook"
+		parameterType="com.djcps.library.model.Book">
 		update book
-        <set>
-            <if test="bookName != null">book_name=#{bookName},</if>
-            <if test="bookAuthor != null">book_author=#{bookAuthor},</if>
-            <if test="bookPublish != null">book_publish=#{bookPublish},</if>
-            <if test="bookCategory != null">book_category=#{bookCategory},</if>
-            <if test="bookPrice != null">book_price=#{bookPrice},</if>
-            <if test="bookIntroduction != null">book_introduction=#{bookIntroduction},</if>
-            <if test="bookImage != null">book_image=#{bookImage},</if>
-            <if test="bookDate != null">book_date=#{bookDate},</if>
-            <if test="isborrowedout != null">isborrowedout=#{isborrowedout},</if>
-            <if test="dateCount != null">dateCount=#{dateCount},</if>
-            <if test="borrowCount != null">borrowCount=#{borrowCount}</if>
-        </set>
-        where book_id = #{bookId}
+		<set>
+			<if test="bookName != null">book_name=#{bookName},</if>
+			<if test="bookAuthor != null">book_author=#{bookAuthor},</if>
+			<if test="bookPublish != null">book_publish=#{bookPublish},</if>
+			<if test="bookCategory != null">book_category=#{bookCategory},</if>
+			<if test="bookPrice != null">book_price=#{bookPrice},</if>
+			<if test="bookIntroduction != null">book_introduction=#{bookIntroduction},</if>
+			<if test="bookImage != null">book_image=#{bookImage},</if>
+			<if test="bookDate != null">book_date=#{bookDate},</if>
+			<if test="isborrowedout != null">isborrowedout=#{isborrowedout},</if>
+			<if test="dateCount != null">dateCount=#{dateCount},</if>
+			<if test="borrowCount != null">borrowCount=#{borrowCount}</if>
+		</set>
+		where book_id = #{bookId}
 	</update>
-	
+
 	<!-- 查询并返回书籍list -->
-	 <select id="listBook" resultMap ="BookResultMap">
-	    select * from book 
-	 </select>
-	 
-	 <!-- 根据书籍id删除书籍 -->
-	 <delete id="delBookByid" parameterType="Integer">
-	    delete from book where book_id = #{bookId}
-	 </delete>
-	 
-	 <!-- 查询书籍总数 -->
-	 <select id="getBookTotalCounts" resultType="java.lang.Integer">
-	    select count(book_id) from book
-	 </select>
-	 
-	 <!-- 按照页数查询书籍信息 -->
-	 <select id="selectAllByCondition" resultMap="BookResultMap">
-	   select * from book limit ${pageIndex},${pageSize}
-	 </select>
-	 
-	 <!-- 按照书籍名称模糊查找书籍 -->
-	 <select id="findBookBybookName" resultMap ="BookResultMap">
-	   select * from book where book_name like '%${bookName}%'
-	 </select>
-	 
-	 <!-- 按照书籍上架日期查找最新上架书籍 -->
-	 <select id="findBookByTheOnsaleDate" resultMap ="BookResultMap">
-	   select * from book order by book_date desc
-	 </select>
-	 
-	 <!-- 根据书籍id查询书籍借书多少天 -->
-	 <select id="getBookdateCount" resultType="java.lang.Integer">
-	 select dateCount from book where book_id = #{bookId}
-	 </select>
-	 
-	 <!-- 根据书籍id更新书籍借出状态 -->
-	 <update id="updateBookByid">
-	 update book set isborrowedout = #{isBorrowed} where book_id = #{bookId}
-	 </update>
-	 
-	 <!-- 根据id获取书籍借出次数 -->
-	 <select id="getBookBorrowCountByid" resultType="java.lang.Integer">
-	 select borrowCount from book where  book_id = #{bookId}
-	 </select>
-	 
-	 <!-- 根据id添加书籍续借次数 -->
-	 <update id="updateBookborrowCountByid">
-	 update book set borrowCount =borrowCount+1 where book_id = #{bookId};
-	 </update>
-	<!--  -->
-	<select id="getBookMsgByid"  resultMap ="BookResultMap">
-	select * from book where book_id = #{bookId}
+	<select id="listBook" resultMap="BookResultMap">
+		select * from book
+	</select>
+
+	<!-- 根据书籍id删除书籍 -->
+	<delete id="delBookByid" parameterType="Integer">
+		delete from book where book_id = #{bookId}
+	</delete>
+
+	<!-- 查询书籍总数 -->
+	<select id="getBookTotalCounts" resultType="java.lang.Integer">
+		select count(book_id) from book
+	</select>
+
+	<!-- 按照页数查询书籍信息 -->
+	<select id="selectAllByCondition" resultMap="BookResultMap">
+		select * from book limit ${pageIndex},${pageSize}
+	</select>
+
+	<!-- 按照书籍名称模糊查找书籍 -->
+	<select id="findBookBybookName" resultMap="BookResultMap">
+		select * from book where book_name like '%${bookName}%'
+	</select>
+
+	<!-- 按照书籍上架日期查找最新上架书籍 -->
+	<select id="findBookByTheOnsaleDate" resultMap="BookResultMap">
+		select * from book order by book_date desc
+	</select>
+
+	<!-- 根据书籍id查询书籍借书多少天 -->
+	<select id="getBookdateCount" resultType="java.lang.Integer">
+		select dateCount from book where book_id = #{bookId}
+	</select>
+
+	<!-- 根据书籍id更新书籍借出状态 -->
+	<update id="updateBookByid">
+		update book set isborrowedout = #{isBorrowed} where book_id = #{bookId}
+	</update>
+
+	<!-- 根据id获取书籍借出次数 -->
+	<select id="getBookBorrowCountByid"
+		resultType="java.lang.Integer">
+		select borrowCount from book where book_id = #{bookId}
+	</select>
+
+	<!-- 根据id添加书籍续借次数 -->
+	<update id="updateBookborrowCountByid">
+		update book set borrowCount =borrowCount+1 where book_id = #{bookId};
+	</update>
+	<!-- 根据id获取书籍信息-->
+	<select id="getBookMsgByid" resultMap="BookResultMap">
+		select * from book where book_id = #{bookId}
+	</select>
+	<!-- 查询最近上架书籍-->
+	<select id="getBookOnRecently" resultMap="BookResultMap">
+		SELECT * FROM book WHERE WEEK(book_date) = WEEK(#{date})
+	</select>
+	<!-- 根据条形码查询书籍信息-->
+	<select id="findBookByBarCode" resultMap="BookResultMap">
+		select * from book where barcode=#{barCode}
 	</select>
 </mapper>
