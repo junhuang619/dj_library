@@ -53,16 +53,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User userLogin(String userPhone, String userPwd,HttpServletRequest request) {
+	public User userLogin(String userPhone, String userPwd, HttpServletRequest request) {
 		String md5Password = DigestUtils.md5DigestAsHex(userPwd.getBytes());
 		User user = userMapper.findUser(userPhone, md5Password);
-		if (user==null) {
+		if (user == null) {
 			return null;
-		}else {
+		} else {
 			request.getSession().setAttribute("user", user);
 			return user;
 		}
-		
+
 	}
 
 	@Override
@@ -92,22 +92,26 @@ public class UserServiceImpl implements UserService {
 	public int userBorrowBook(HttpServletRequest request) {
 		// 获取前端传来的数据
 		String bookId = request.getParameter("bookId");
-		/**User user = (User) request.getSession().getAttribute("user");*/
-		// 测试代码  
-		User user=new User();
+		String bookNumber=request.getParameter("bookNumber");
+		if(Integer.valueOf(bookNumber)==0) {
+			return 0;
+		}
+		/** User user = (User) request.getSession().getAttribute("user"); */
+		// 测试代码
+		User user = new User();
 		user.setIsAllowBorrow(1);
 		Integer isAllowBorrow = user.getIsAllowBorrow();
 		if (isAllowBorrow != 1) {
 			return 0;
 		}
-		BorrowingBooks books = new BorrowingBooks();
+		BorrowingBooks borrowingBooks = new BorrowingBooks();
 		// 存储bookid
-		books.setBookId(Integer.valueOf(bookId));
+		borrowingBooks.setBookId(Integer.valueOf(bookId));
 		// 存储用户id
 		/** books.setUserId(user.getUserId()); */
 		// 改行为测试代码行
-		books.setUserId(1);
-		books.setIsreturn(0);
+		borrowingBooks.setUserId(1);
+		borrowingBooks.setIsreturn(0);
 		SimpleDateFormat format = new SimpleDateFormat("yy-MM-dd");
 		Date fDate = new Date();
 		Calendar rightNow = Calendar.getInstance();
@@ -117,18 +121,19 @@ public class UserServiceImpl implements UserService {
 		Date lDate = rightNow.getTime();
 		try {
 			fDate = format.parse(format.format(fDate));
-			books.setDate(fDate);
+			borrowingBooks.setDate(fDate);
 			lDate = format.parse(format.format(lDate));
-			books.setLastdate(lDate);
+			borrowingBooks.setLastdate(lDate);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		int row = borrowingBooksMapper.borrowBook(books);
+		int row = borrowingBooksMapper.borrowBook(borrowingBooks);
 		if (1 > row) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		int isBorrowed = 1;
-		return bookMapper.updateBookByid(books.getBookId(), isBorrowed);
+		return bookMapper.borrowingBookByid(borrowingBooks.getBookId(), isBorrowed);
+
 	}
 
 	@Override
@@ -141,14 +146,14 @@ public class UserServiceImpl implements UserService {
 		if (row < 1) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
-		return bookMapper.updateBookByid(books.getBookId(), isBorrowed);
+		return bookMapper.returnBookByid(books.getBookId(), isBorrowed);
 	}
 
 	@Override
 	public int continueBorrowBook(HttpServletRequest request) {
-		String borrowBookid=request.getParameter("borrowBookid");
-		/**User user = (User) request.getSession().getAttribute("user");*/
-		User user=new User();
+		String borrowBookid = request.getParameter("borrowBookid");
+		/** User user = (User) request.getSession().getAttribute("user"); */
+		User user = new User();
 		user.setIsAllowBorrow(1);
 		Integer isAllowBorrow = user.getIsAllowBorrow();
 		if (isAllowBorrow != 1) {
@@ -187,7 +192,6 @@ public class UserServiceImpl implements UserService {
 			date = formata.parse(formata.format(date));
 			System.out.println(date);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return bookMapper.getBookOnRecently(date);

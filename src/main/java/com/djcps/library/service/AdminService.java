@@ -24,6 +24,7 @@ public interface AdminService {
 	/**管理员登陆
 	 * @param phone
 	 * @param password
+	 * @param request
 	 * @return
 	 */
 	Admin adminLogin(String phone, String password,HttpServletRequest request);

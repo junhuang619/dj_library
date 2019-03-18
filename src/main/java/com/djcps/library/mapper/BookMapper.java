@@ -66,14 +66,14 @@ public interface BookMapper {
 	 */
 	int getBookdateCount(@Param("bookId")Integer bookId);
 
-	/**通过bookId更改书籍
+	/**通过bookId还书
 	 * @param bookId
 	 * @param isBorrowed
 	 * @return
 	 */
-	int updateBookByid(@Param("bookId")Integer bookId,
+	int returnBookByid(@Param("bookId")Integer bookId,
 			@Param("isBorrowed") int isBorrowed);
-
+	
 	/**通过bookId获取该书被借次数
 	 * @param bookId
 	 * @return
@@ -102,4 +102,12 @@ public interface BookMapper {
 	 * @return
 	 */
 	Book findBookByBarCode(@Param("barCode")String barCode);
+	
+	/**通过id借书
+	 * @param bookId
+	 * @param isBorrowed
+	 * @return
+	 */
+	int borrowingBookByid(@Param("bookId")Integer bookId,
+			@Param("isBorrowed") int isBorrowed);
 }

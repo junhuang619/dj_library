@@ -18,6 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="dateCount" property="dateCount" />
 		<result column="borrowCount" property="borrowCount" />
 		<result column="barcode" property="barCode" />
+		<result column="book_number" property="bookNumber" />
 	</resultMap>
 	<!-- 添加新书信息 -->
 	<insert id="addBook"
@@ -25,9 +26,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		useGeneratedKeys="true">
 		INSERT INTO
 		book(book_name,book_author,book_publish,book_category,book_price,book_introduction,
-		book_image,book_date,isborrowedout,dateCount,borrowCount,barcode)
+		book_image,book_date,isborrowedout,dateCount,borrowCount,barcode,book_number)
 		VALUES(#{bookName},#{bookAuthor},#{bookPublish},#{bookCategory},#{bookPrice},
-		#{bookIntroduction},#{bookImage},#{bookDate},#{isborrowedout},#{dateCount},#{borrowCount},#{barCode})
+		#{bookIntroduction},#{bookImage},#{bookDate},#{isborrowedout},#{dateCount},#{borrowCount},#{barCode},#{bookNumber})
 	</insert>
 	<!-- 更新书籍信息 -->
 	<update id="updateBook"
@@ -45,6 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="isborrowedout != null">isborrowedout=#{isborrowedout},</if>
 			<if test="dateCount != null">dateCount=#{dateCount},</if>
 			<if test="borrowCount != null">borrowCount=#{borrowCount}</if>
+			<if test="bookNumber != null">book_number=#{bookNumber}</if>
 		</set>
 		where book_id = #{bookId}
 	</update>
@@ -56,37 +58,58 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 根据书籍id删除书籍 -->
 	<delete id="delBookByid" parameterType="Integer">
-		delete from book where book_id = #{bookId}
+		delete from book where
+		book_id = #{bookId}
 	</delete>
 
 	<!-- 查询书籍总数 -->
 	<select id="getBookTotalCounts" resultType="java.lang.Integer">
-		select count(book_id) from book
+		select count(book_id)
+		from book
 	</select>
 
 	<!-- 按照页数查询书籍信息 -->
 	<select id="selectAllByCondition" resultMap="BookResultMap">
-		select * from book limit ${pageIndex},${pageSize}
+		select * from book
+		limit ${pageIndex},${pageSize}
 	</select>
 
 	<!-- 按照书籍名称模糊查找书籍 -->
 	<select id="findBookBybookName" resultMap="BookResultMap">
-		select * from book where book_name like '%${bookName}%'
+		select * from book
+		where book_name like '%${bookName}%'
 	</select>
 
 	<!-- 按照书籍上架日期查找最新上架书籍 -->
 	<select id="findBookByTheOnsaleDate" resultMap="BookResultMap">
-		select * from book order by book_date desc
+		select * from
+		book order by book_date desc
 	</select>
 
 	<!-- 根据书籍id查询书籍借书多少天 -->
 	<select id="getBookdateCount" resultType="java.lang.Integer">
-		select dateCount from book where book_id = #{bookId}
+		select dateCount from
+		book where book_id = #{bookId}
 	</select>
 
 	<!-- 根据书籍id更新书籍借出状态 -->
-	<update id="updateBookByid">
-		update book set isborrowedout = #{isBorrowed} where book_id = #{bookId}
+	<update id="borrowingBookByid">
+		update book
+		<set>
+			<if test="isBorrowed !=null">isborrowedout=#{isBorrowed},</if>
+			book_number=book_number-1
+		</set>
+		where book_id = #{bookId}
+	</update>
+
+	<!-- 根据书籍id更新书籍借出状态 -->
+	<update id="returnBookByid">
+		update book
+		<set>
+			<if test="isBorrowed !=null">isborrowedout=#{isBorrowed},</if>
+			book_number=book_number+1
+		</set>
+		where book_id = #{bookId}
 	</update>
 
 	<!-- 根据id获取书籍借出次数 -->
@@ -97,18 +120,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 根据id添加书籍续借次数 -->
 	<update id="updateBookborrowCountByid">
-		update book set borrowCount =borrowCount+1 where book_id = #{bookId};
+		update book set borrowCount =borrowCount+1 where
+		book_id = #{bookId};
 	</update>
-	<!-- 根据id获取书籍信息-->
+	<!-- 根据id获取书籍信息 -->
 	<select id="getBookMsgByid" resultMap="BookResultMap">
-		select * from book where book_id = #{bookId}
+		select * from book where
+		book_id = #{bookId}
 	</select>
-	<!-- 查询最近上架书籍-->
+	<!-- 查询最近上架书籍 -->
 	<select id="getBookOnRecently" resultMap="BookResultMap">
-		SELECT * FROM book WHERE WEEK(book_date) = WEEK(#{date})
+		SELECT * FROM book
+		WHERE WEEK(book_date) = WEEK(#{date})
 	</select>
-	<!-- 根据条形码查询书籍信息-->
+	<!-- 根据条形码查询书籍信息 -->
 	<select id="findBookByBarCode" resultMap="BookResultMap">
-		select * from book where barcode=#{barCode}
+		select * from book
+		where barcode=#{barCode}
 	</select>
 </mapper>

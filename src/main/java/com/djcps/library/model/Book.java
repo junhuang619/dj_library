@@ -1,17 +1,12 @@
 package com.djcps.library.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author djsxs
  *
  */
-public class Book implements Serializable{
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 9119960034204090845L;
+public class Book{
 
 	private Integer bookId;
 
@@ -38,8 +33,82 @@ public class Book implements Serializable{
     private Integer borrowCount;
     
     private String barCode;
+    
+    private Integer bookNumber;
 
-    public Integer getIsborrowedout() {
+	public Integer getBookId() {
+		return bookId;
+	}
+
+	public void setBookId(Integer bookId) {
+		this.bookId = bookId;
+	}
+
+	public String getBookName() {
+		return bookName;
+	}
+
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
+
+	public String getBookAuthor() {
+		return bookAuthor;
+	}
+
+	public void setBookAuthor(String bookAuthor) {
+		this.bookAuthor = bookAuthor;
+	}
+
+	public String getBookPublish() {
+		return bookPublish;
+	}
+
+	public void setBookPublish(String bookPublish) {
+		this.bookPublish = bookPublish;
+	}
+
+	public Integer getBookCategory() {
+		return bookCategory;
+	}
+
+	public void setBookCategory(Integer bookCategory) {
+		this.bookCategory = bookCategory;
+	}
+
+	public Double getBookPrice() {
+		return bookPrice;
+	}
+
+	public void setBookPrice(Double bookPrice) {
+		this.bookPrice = bookPrice;
+	}
+
+	public String getBookIntroduction() {
+		return bookIntroduction;
+	}
+
+	public void setBookIntroduction(String bookIntroduction) {
+		this.bookIntroduction = bookIntroduction;
+	}
+
+	public String getBookImage() {
+		return bookImage;
+	}
+
+	public void setBookImage(String bookImage) {
+		this.bookImage = bookImage;
+	}
+
+	public Date getBookDate() {
+		return bookDate;
+	}
+
+	public void setBookDate(Date bookDate) {
+		this.bookDate = bookDate;
+	}
+
+	public Integer getIsborrowedout() {
 		return isborrowedout;
 	}
 
@@ -63,83 +132,19 @@ public class Book implements Serializable{
 		this.borrowCount = borrowCount;
 	}
 
-	public Date getBookDate() {
-		return bookDate;
-	}
-
-	public void setBookDate(Date bookDate) {
-		this.bookDate = bookDate;
-	}
-
-	public String getBookImage() {
-		return bookImage;
-	}
-
-	public void setBookImage(String bookImage) {
-		this.bookImage = bookImage;
-	}
-
-	public Integer getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(Integer bookId) {
-        this.bookId = bookId;
-    }
-
-    public String getBookName() {
-        return bookName;
-    }
-
-    public void setBookName(String bookName) {
-        this.bookName = bookName == null ? null : bookName.trim();
-    }
-
-    public String getBookAuthor() {
-        return bookAuthor;
-    }
-
-    public void setBookAuthor(String bookAuthor) {
-        this.bookAuthor = bookAuthor == null ? null : bookAuthor.trim();
-    }
-
-    public String getBookPublish() {
-        return bookPublish;
-    }
-
-    public void setBookPublish(String bookPublish) {
-        this.bookPublish = bookPublish == null ? null : bookPublish.trim();
-    }
-
-    public Integer getBookCategory() {
-        return bookCategory;
-    }
-
-    public void setBookCategory(Integer bookCategory) {
-        this.bookCategory = bookCategory;
-    }
-
-    public Double getBookPrice() {
-        return bookPrice;
-    }
-
-    public void setBookPrice(Double bookPrice) {
-        this.bookPrice = bookPrice;
-    }
-
-    public String getBookIntroduction() {
-        return bookIntroduction;
-    }
-
-    public void setBookIntroduction(String bookIntroduction) {
-        this.bookIntroduction = bookIntroduction == null ? null : bookIntroduction.trim();
-    }
-
 	public String getBarCode() {
 		return barCode;
 	}
 
 	public void setBarCode(String barCode) {
 		this.barCode = barCode;
+	}
+
+	public Integer getBookNumber() {
+		return bookNumber;
+	}
+
+	public void setBookNumber(Integer bookNumber) {
+		this.bookNumber = bookNumber;
 	}
 }

@@ -24,6 +24,7 @@ public interface UserService {
 	/**用户登陆
 	 * @param phone
 	 * @param password
+	 * @param request
 	 * @return
 	 */
 	User userLogin(String phone, String password,HttpServletRequest request);

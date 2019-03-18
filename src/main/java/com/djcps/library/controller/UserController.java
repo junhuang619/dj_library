@@ -23,7 +23,7 @@ import com.djcps.library.service.UserService;
  *
  */
 @RestController
-@RequestMapping(value = "/user", method = { RequestMethod.GET, RequestMethod.POST })
+@RequestMapping(value = "dj_library/user", method = { RequestMethod.GET, RequestMethod.POST })
 public class UserController {
 	@Resource(name = "userservice")
 	private UserService userService;
@@ -181,10 +181,10 @@ public class UserController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/userReturnBooksPage")
+	/**@RequestMapping("/userReturnBooksPage")
 	public RetResult<String> userReturnBooksPage() {
 		return RetResponse.makeOKRsp();
-	}
+	}*/
 
 	/**
 	 * 按照书名进行模糊查询
@@ -213,7 +213,7 @@ public class UserController {
 		return RetResponse.makeOKRsp(list);
 	}
 	
-	public User findUserByPhone(String phone) {
+	/*public User findUserByPhone(String phone) {
 		return userService.findUserByUserPhone(phone);
-	}
+	}*/
 }

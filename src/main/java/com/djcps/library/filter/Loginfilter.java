@@ -21,8 +21,8 @@ import com.djcps.library.controller.AdminController;
  * @author djsxs
  *
  */
-@Component
-@WebFilter(urlPatterns="/admin/adminLogin",filterName="loginfilter")
+/*@Component
+@WebFilter(urlPatterns="/admin/adminLogin",filterName="loginfilter")*/
 public class Loginfilter implements Filter{
 	
 	@Resource

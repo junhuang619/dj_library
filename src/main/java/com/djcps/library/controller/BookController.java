@@ -16,9 +16,8 @@ import com.djcps.library.service.BookService;
  *
  */
 @RestController
-@RequestMapping(value="/book")
+@RequestMapping(value="dj_library/book")
 public class BookController {
-    
 	@Autowired
     @Qualifier("bookservice")
 	private BookService bookService; 

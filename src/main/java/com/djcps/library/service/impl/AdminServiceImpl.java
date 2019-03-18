@@ -80,7 +80,7 @@ public class AdminServiceImpl implements AdminService {
 	 */
 	@Override
 	public int addBookMsg(MultipartFile file, HttpServletRequest request) {
-		String filePath = "F:\\eclipse-workspace\\newworkspace\\dj-library-1\\src\\main\\resources\\static\\upload\\";
+		String filePath = "F:\\eclipse-workspace\\newworkspace\\dj_library\\src\\main\\resources\\static\\upload\\";
 		String bookName = request.getParameter("bookName");
 		String price = request.getParameter("price");
 		String desc = request.getParameter("desc");
@@ -88,6 +88,7 @@ public class AdminServiceImpl implements AdminService {
 		String bookAuthor=request.getParameter("bookAuthor");
 		String bookPublish=request.getParameter("bookPublish");
 		String bookCategory=request.getParameter("bookCategory");
+		String bookNumber=request.getParameter("bookNumber");
 		Book book = new Book();
 		book.setBookName(bookName);
 		book.setBookIntroduction(desc);
@@ -97,6 +98,7 @@ public class AdminServiceImpl implements AdminService {
 		book.setBookPublish(bookPublish);
 		book.setBorrowCount(0);
 		book.setIsborrowedout(0);
+		book.setBookNumber(Integer.valueOf(bookNumber));
 		book.setBookCategory(Integer.valueOf(bookCategory));
 		SimpleDateFormat formata = new SimpleDateFormat("yy-MM-dd");
 		Date bookDate = new Date();
@@ -134,7 +136,8 @@ public class AdminServiceImpl implements AdminService {
 		String datecount = request.getParameter("datecount");
 		String bookAuthor=request.getParameter("bookAuthor");
 		String bookPublish=request.getParameter("bookPulish");
-		String bookCategory=request.getParameter("category");
+		String bookCategory=request.getParameter("bookCategory");
+		String bookNumber=request.getParameter("bookNumber");
 		Book book = new Book();
 		book.setBookId(Integer.valueOf(bookId));
 		book.setBookName(bookName);
@@ -143,6 +146,7 @@ public class AdminServiceImpl implements AdminService {
 		book.setBookPrice(Double.valueOf(price));
 		book.setBookAuthor(bookAuthor);
 		book.setBookPublish(bookPublish);
+		book.setBookNumber(Integer.valueOf(bookNumber));
 		book.setBookCategory(Integer.valueOf(bookCategory));
 		File dest=FileUpLoadUtil.fileUpLoad(file);
 		book.setBookImage(dest.getName());

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,7 +17,6 @@ import com.djcps.library.common.RetResponse;
 import com.djcps.library.common.RetResult;
 import com.djcps.library.model.Admin;
 import com.djcps.library.model.Book;
-import com.djcps.library.model.User;
 import com.djcps.library.model.vo.PageVo;
 import com.djcps.library.service.AdminService;
 
@@ -27,7 +25,7 @@ import com.djcps.library.service.AdminService;
  *
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("dj_library/admin")
 public class AdminController {
 	@Autowired
 	@Qualifier(value = "adminservice")
@@ -40,13 +38,12 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping("/isAdminExist")
-	@ResponseBody
 	public RetResult<String> adminIsExist(@RequestParam("phone") String phone) {
 		boolean b = adminService.adminIsExist(phone);
-		if (b) {
-			return RetResponse.makeOKRsp();
-		} else {
+		if (!b) {
 			return RetResponse.makeErrRsp("该用户名已存在");
+		} else {
+			return RetResponse.makeOKRsp();
 		}
 	}
 
@@ -54,7 +51,6 @@ public class AdminController {
 	 * 管理员登录后台
 	 */
 	@RequestMapping("/adminLogin")
-	@ResponseBody
 	public RetResult<Object> adminLogin(@RequestParam("phone") String phone, @RequestParam("password") String password,
 			HttpServletRequest request) {
 		Admin admin = adminService.adminLogin(phone, password,request);
@@ -164,9 +160,9 @@ public class AdminController {
 	/**根据phone查询管理员信息
 	 * @param phone
 	 * @return
-	 */
+	 *//*
 	public Admin findAdminByPhone(String phone){
 		return adminService.findAdminByPhone(phone);
-	}
+	}*/
 
 }

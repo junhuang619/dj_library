@@ -16,7 +16,7 @@ import javax.annotation.Resource;
  * @author djsxs
  *
  */
-@RequestMapping("/borrowing")
+@RequestMapping("dj_library/borrowing")
 @RestController
 public class BorrowingController {
 
