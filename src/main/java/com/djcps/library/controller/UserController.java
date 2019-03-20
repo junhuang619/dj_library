@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +17,7 @@ import com.djcps.library.common.RetResponse;
 import com.djcps.library.common.RetResult;
 import com.djcps.library.model.Book;
 import com.djcps.library.model.User;
+import com.djcps.library.model.vo.BookVo;
 import com.djcps.library.service.UserService;
 
 /**
@@ -81,10 +83,14 @@ public class UserController {
 	 * @param password
 	 * @return
 	 */
-	@RequestMapping("/userSubmit")
-	public RetResult<String> updateUserByphone(@Param("userName") String userName, @Param("password") String password,
-			@Param("phone") String phone) {
-		int row = userService.updateuser(userName, password, phone);
+	@RequestMapping("/updateUserByphone")
+	public RetResult<String> updateUserByphone(@Param("userName") String userName, @Param("oldPassword") String oldPassword,
+			@Param("phone") String phone,@Param("password") String password) {
+		User user=userService.findUserByUserPhone(phone);
+		if (!DigestUtils.md5DigestAsHex(password.getBytes()).equals(user.getUserPhone())) {
+			return RetResponse.makeErrRsp("密码错误");
+		}
+		int row = userService.updateUser(userName, password, phone);
 		if (row == 0) {
 			return RetResponse.makeErrRsp("update user failed");			
 		}
@@ -98,11 +104,9 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping("/userLogOut")
-	public Object userLogOut(HttpServletRequest request) {
+	public void userLogOut(HttpServletRequest request) {
 		request.getSession().invalidate();
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("index");
-		return modelAndView;
+		
 	}
 
 	/**
@@ -195,25 +199,24 @@ public class UserController {
 		List<Book> list = userService.findBookBybookName(bookName);
 		return RetResponse.makeOKRsp(list);
 	}
-
+	
 	/**
-	 * 按照书籍上架时间查询
+	 * 根据书籍的id查询该书籍的详细借阅信息
 	 * 
+	 * @param bookId
 	 * @return
 	 */
-	@RequestMapping("/findBookByOnsaleDate")
-	public RetResult<List<Book>> findBookByTheOnSaleDate() {
-		List<Book> list = userService.findBookByTheOnsaleDate();
-		return RetResponse.makeOKRsp(list);
+	@RequestMapping("/getBorrowedMsgBybookId")
+	public RetResult<BookVo> getBorrowedMsgBybookId(@RequestParam("bookId") String bookId) {
+		BookVo bookVo = userService.getBorrowedMsg(bookId);
+		if (bookVo == null) {
+			return RetResponse.makeErrRsp("书籍信息返回失败！");
+		} else {
+			return RetResponse.makeOKRsp(bookVo);
+		}
 	}
 	
-	@RequestMapping("/findBookByOnRecently")
-	public RetResult<List<Book>> findBookByOnRecently() {
-		List<Book> list = userService.findBookByOnRecently();
-		return RetResponse.makeOKRsp(list);
-	}
-	
-	/*public User findUserByPhone(String phone) {
+	public User findUserByPhone(String phone) {
 		return userService.findUserByUserPhone(phone);
-	}*/
+	}
 }

@@ -50,4 +50,6 @@ public interface BorrowingBooksMapper {
 	 * @return
 	 */
 	int updatelastdateByid(BorrowingBooks books);
+	
+	BorrowingBooks getBorrowMsgBybookId(@Param("bookId")Integer bookId);
 }

@@ -11,7 +11,7 @@ public class Admin {
 
     private String adminPwd;
 
-    private String adminphone;
+    private String adminPhone;
 
     public Integer getAdminId() {
         return adminId;
@@ -37,14 +37,13 @@ public class Admin {
         this.adminPwd = adminPwd == null ? null : adminPwd.trim();
     }
 
-	public String getAdminphone() {
-		return adminphone;
+	public String getAdminPhone() {
+		return adminPhone;
 	}
 
-	public void setAdminphone(String adminphone) {
-		this.adminphone = adminphone;
+	public void setAdminPhone(String adminPhone) {
+		this.adminPhone = adminPhone;
 	}
 
 	
-
 }

@@ -18,7 +18,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="dateCount" property="dateCount" />
 		<result column="borrowCount" property="borrowCount" />
 		<result column="barcode" property="barCode" />
-		<result column="book_number" property="bookNumber" />
 	</resultMap>
 	<!-- 添加新书信息 -->
 	<insert id="addBook"
@@ -26,9 +25,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		useGeneratedKeys="true">
 		INSERT INTO
 		book(book_name,book_author,book_publish,book_category,book_price,book_introduction,
-		book_image,book_date,isborrowedout,dateCount,borrowCount,barcode,book_number)
+		book_image,book_date,isborrowedout,dateCount,borrowCount,barcode)
 		VALUES(#{bookName},#{bookAuthor},#{bookPublish},#{bookCategory},#{bookPrice},
-		#{bookIntroduction},#{bookImage},#{bookDate},#{isborrowedout},#{dateCount},#{borrowCount},#{barCode},#{bookNumber})
+		#{bookIntroduction},#{bookImage},#{bookDate},#{isborrowedout},#{dateCount},#{borrowCount},#{barCode})
 	</insert>
 	<!-- 更新书籍信息 -->
 	<update id="updateBook"
@@ -46,7 +45,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="isborrowedout != null">isborrowedout=#{isborrowedout},</if>
 			<if test="dateCount != null">dateCount=#{dateCount},</if>
 			<if test="borrowCount != null">borrowCount=#{borrowCount}</if>
-			<if test="bookNumber != null">book_number=#{bookNumber}</if>
 		</set>
 		where book_id = #{bookId}
 	</update>
@@ -83,7 +81,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 按照书籍上架日期查找最新上架书籍 -->
 	<select id="findBookByTheOnsaleDate" resultMap="BookResultMap">
 		select * from
-		book order by book_date desc
+		book order by book_date desc limit ${pageIndex},${pageSize}
+	</select>
+	<!-- 查找热门书籍 -->
+	<select id="findHotBook" resultMap="BookResultMap">
+		select * from
+		book order by
+		borrowCount desc limit ${pageIndex},${pageSize}
 	</select>
 
 	<!-- 根据书籍id查询书籍借书多少天 -->
@@ -93,23 +97,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<!-- 根据书籍id更新书籍借出状态 -->
-	<update id="borrowingBookByid">
-		update book
-		<set>
-			<if test="isBorrowed !=null">isborrowedout=#{isBorrowed},</if>
-			book_number=book_number-1
-		</set>
-		where book_id = #{bookId}
-	</update>
-
-	<!-- 根据书籍id更新书籍借出状态 -->
-	<update id="returnBookByid">
-		update book
-		<set>
-			<if test="isBorrowed !=null">isborrowedout=#{isBorrowed},</if>
-			book_number=book_number+1
-		</set>
-		where book_id = #{bookId}
+	<update id="updateBookByid">
+		update book set isborrowedout=#{isBorrowed} where
+		book_id = #{bookId}
 	</update>
 
 	<!-- 根据id获取书籍借出次数 -->
@@ -138,4 +128,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from book
 		where barcode=#{barCode}
 	</select>
+	<select id="getBookListBybookCondition" resultMap="BookResultMap">
+		select * from book
+		<where>
+			1=1
+			<if test="bookCondition.bookName!=null">and book_name like '%${bookCondition.bookName}%'</if>
+			<if test="bookCondition.bookDate!=null">and book_date=#{bookCondition.bookDate}</if>
+			<if test="bookCondition.isborrowedout!=null">and isborrowedout=#{bookCondition.isborrowedout}</if>
+		</where>
+		limit ${pageIndex},${pageSize}
+	</select>
+
+
+
 </mapper>

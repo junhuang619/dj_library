@@ -1,4 +1,4 @@
-/*package com.djcps.library.controller;
+package com.djcps.library.controller;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -11,10 +11,7 @@ import com.djcps.library.common.RetResult;
 import com.djcps.library.model.Admin;
 import com.djcps.library.model.User;
 
-*//**
- * @author djsxs
- *
- *//*
+
 @RestController
 @RequestMapping("dj_library/")
 public class LoginController {
@@ -36,4 +33,4 @@ public class LoginController {
 		}
 		return RetResponse.makeErrRsp("无法访问");
 	}
-}*/
+}

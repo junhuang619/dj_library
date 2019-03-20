@@ -28,18 +28,18 @@ public class BorrowingBooksRecordServiceImpl implements BorrowingBooksRecordServ
 	public PageVo selectAllBorrowingRecord(int pageNum) {
 		int borrowingTotalCounts = borrowingBooksMapper.getBorrowingTotalCount();
 		PageVo pageVo = new PageVo();
-		int pageSize = 8;
+		int pageSize = 10;
 		int pageIndex = 0;
 		int totalPage = 0;
 		if (0 == pageNum) {
 			pageIndex = 1;
-			pageSize = 8;
+			pageSize = 10;
 		} else {
 			pageIndex = (pageNum - 1) * pageSize ;
-			pageSize = pageNum * 8;
+			pageSize = pageNum * 10;
 		}
 		if (borrowingTotalCounts > 0) {
-			totalPage = (borrowingTotalCounts - 1) / 8 + 1;
+			totalPage = (borrowingTotalCounts - 1) / 10 + 1;
 		}
 		pageVo.setPageIndex(pageIndex);
 		pageVo.setTotalPage(totalPage);

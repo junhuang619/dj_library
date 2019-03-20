@@ -12,11 +12,11 @@ import com.djcps.library.model.User;
 public class BorrowingBooksVo {
     private User user;
     /**借阅书籍 */
-    private Book book;  
+    private Book book;
     /**借书日期 */
-    private String dateOfBorrowing;  
+    private String dateOfBorrowing;
     /**还书日期 */
-    private String dateOfReturn;    
+    private String dateOfReturn;
 
     public void setBook(Book book) {
         this.book = book;

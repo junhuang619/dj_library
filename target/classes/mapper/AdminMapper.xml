@@ -8,7 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<id column="admin_id" property="adminId" />
 		<result column="admin_name" property="adminName" />
 		<result column="admin_pwd" property="adminPwd" />
-		<result column="admin_phone" property="adminphone" />
+		<result column="admin_phone" property="adminPhone" />
 
 	</resultMap>
 	
@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <!-- 通过手机查找管理员 -->
     <select id="findAdminByPhone" parameterType="string" resultMap="AdminResultMap" >
-       select * from p_admin where admin_phone = #{phone}  ;
+       select * from p_admin where admin_phone = #{phone};
     </select>
 	
 </mapper>

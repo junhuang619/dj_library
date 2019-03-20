@@ -21,6 +21,7 @@ import com.djcps.library.mapper.UserMapper;
 import com.djcps.library.model.Book;
 import com.djcps.library.model.BorrowingBooks;
 import com.djcps.library.model.User;
+import com.djcps.library.model.vo.BookVo;
 import com.djcps.library.service.UserService;
 
 /**
@@ -46,6 +47,7 @@ public class UserServiceImpl implements UserService {
 		user.setUserPwd(password);
 		user.setUserPhone(phone);
 		user.setIsAllowBorrow(1);
+		user.setScore(0.0);
 		String md5Password = DigestUtils.md5DigestAsHex(user.getUserPwd().getBytes());
 		user.setUserPwd(md5Password);
 		int row = userMapper.register(user);
@@ -66,7 +68,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int updateuser(String userName, String password, String phone) {
+	public int updateUser(String userName, String password, String phone) {
 		User user = new User();
 		user.setUserName(userName);
 		user.setUserPhone(phone);
@@ -92,10 +94,6 @@ public class UserServiceImpl implements UserService {
 	public int userBorrowBook(HttpServletRequest request) {
 		// 获取前端传来的数据
 		String bookId = request.getParameter("bookId");
-		String bookNumber=request.getParameter("bookNumber");
-		if(Integer.valueOf(bookNumber)==0) {
-			return 0;
-		}
 		/** User user = (User) request.getSession().getAttribute("user"); */
 		// 测试代码
 		User user = new User();
@@ -131,8 +129,13 @@ public class UserServiceImpl implements UserService {
 		if (1 > row) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
+		int score = 1;
+		int row2 =userMapper.addScoreByUid(borrowingBooks.getUserId(), score);
+		if (row2<1) {
+			return 0;
+		}
 		int isBorrowed = 1;
-		return bookMapper.borrowingBookByid(borrowingBooks.getBookId(), isBorrowed);
+		return bookMapper.updateBookByid(borrowingBooks.getBookId(), isBorrowed);
 
 	}
 
@@ -140,13 +143,15 @@ public class UserServiceImpl implements UserService {
 	@Transactional(rollbackFor = Exception.class)
 	public int returnBook(Integer brrowingbookid, int i) {
 		// TODO Auto-generated method stub
-		BorrowingBooks books = borrowingBooksMapper.getBorrowMsgByid(brrowingbookid);
+		BorrowingBooks borrowingBooks = borrowingBooksMapper.getBorrowMsgByid(brrowingbookid);
 		int isBorrowed = 0;
 		int row = borrowingBooksMapper.retunBook(i, brrowingbookid);
 		if (row < 1) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
-		return bookMapper.returnBookByid(books.getBookId(), isBorrowed);
+		int score = 3;
+		userMapper.addScoreByUid(borrowingBooks.getUserId(), score);
+		return bookMapper.updateBookByid(borrowingBooks.getBookId(), isBorrowed);
 	}
 
 	@Override
@@ -171,6 +176,8 @@ public class UserServiceImpl implements UserService {
 		if (row == 0) {
 			return 0;
 		}
+		int score = 2;
+		userMapper.addScoreByUid(borrowingBooks.getUserId(), score);
 		return bookMapper.updateBookborrowCountByid(borrowingBooks.getBookId());
 	}
 
@@ -180,21 +187,39 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<Book> findBookByTheOnsaleDate() {
-		return bookMapper.findBookByTheOnsaleDate();
-	}
-
-	@Override
-	public List<Book> findBookByOnRecently() {
-		SimpleDateFormat formata = new SimpleDateFormat("yy-MM-dd");
-		Date date = new Date();
-		try {
-			date = formata.parse(formata.format(date));
-			System.out.println(date);
-		} catch (ParseException e) {
-			e.printStackTrace();
+	public BookVo getBorrowedMsg(String bookId) {
+		// TODO Auto-generated method stub
+		BorrowingBooks borrowingBooks = borrowingBooksMapper.getBorrowMsgBybookId(Integer.valueOf(bookId));
+		Book book = bookMapper.getBookMsgByid(Integer.valueOf(bookId));
+		// 创建一个工具类封装数据
+		BookVo bookVo = new BookVo();
+		// 封装书籍的id
+		bookVo.setBookId(Integer.valueOf(bookId));
+		// 封装书籍的名称
+		bookVo.setBookName(book.getBookName());
+		if (book.getIsborrowedout() == 1) {
+			// 封装书籍的借书起始日期
+			bookVo.setBeginDate(borrowingBooks.getDate());
+			Date today = new Date();
+			Date enddate = new Date();
+			SimpleDateFormat format = new SimpleDateFormat("yy-MM-dd");
+			try {
+				today = format.parse(format.format(today));
+				enddate = format.parse(format.format(borrowingBooks.getLastdate()));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			int dateCount = (int) (enddate.getTime() - today.getTime()) / (24 * 60 * 60 * 1000);
+			bookVo.setDateCount(dateCount);
+			bookVo.setUser(userMapper.findUserById(borrowingBooks.getUserId()));
+		} else {
+			// 封装书籍的借书起始日期
+			bookVo.setBeginDate(null);
+			bookVo.setDateCount(0);
+			bookVo.setUser(null);
 		}
-		return bookMapper.getBookOnRecently(date);
+		return bookVo;
 	}
 
 }

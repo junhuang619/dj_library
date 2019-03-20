@@ -43,4 +43,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 <update id="updatelastdateByid">
 	 update borrowingbooks set lastdate =#{lastdate},isreturn = 0 where id =#{id}
 	 </update>
+	 
+	 <select id="getBorrowMsgBybookId" resultMap="BookBorrowResultMap">
+	 select * from borrowingbooks where book_id =#{bookId}
+	 </select>
 </mapper>

@@ -157,12 +157,18 @@ public class AdminController {
 		return RetResponse.makeOKRsp(book);
 	}
 	
+	@RequestMapping("/autoSortScore")
+	public RetResult<PageVo> autoSortScore(@RequestParam("pageNum") int pageNum){
+		PageVo pVo =adminService.autoSortScore(pageNum);
+		return RetResponse.makeOKRsp(pVo);
+	}
+	
 	/**根据phone查询管理员信息
 	 * @param phone
 	 * @return
-	 *//*
+	 */
 	public Admin findAdminByPhone(String phone){
 		return adminService.findAdminByPhone(phone);
-	}*/
+	}
 
 }

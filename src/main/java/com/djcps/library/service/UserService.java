@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.djcps.library.model.Book;
 import com.djcps.library.model.User;
+import com.djcps.library.model.vo.BookVo;
 
 /**
  * @author djsxs
@@ -35,7 +36,7 @@ public interface UserService {
 	 * @param phone
 	 * @return
 	 */
-	int updateuser(String userName, String password, String phone);
+	int updateUser(String userName, String password, String phone);
 
 	/**通过phone查询用户
 	 * @param phone
@@ -68,10 +69,6 @@ public interface UserService {
 	 */
 	List<Book> findBookBybookName(String bookName);
 
-	/**根据上架时间查询书籍
-	 * @return
-	 */
-	List<Book> findBookByTheOnsaleDate();
 
 	/**续借
 	 * @param request
@@ -79,8 +76,7 @@ public interface UserService {
 	 */
 	int continueBorrowBook(HttpServletRequest request);
 	
-	/**查找最近几天上架书籍
-	 * @return
-	 */
-	List<Book> findBookByOnRecently();
+	BookVo getBorrowedMsg(String bookId);
+	
+	
 }

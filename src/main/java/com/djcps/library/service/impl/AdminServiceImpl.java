@@ -88,7 +88,6 @@ public class AdminServiceImpl implements AdminService {
 		String bookAuthor=request.getParameter("bookAuthor");
 		String bookPublish=request.getParameter("bookPublish");
 		String bookCategory=request.getParameter("bookCategory");
-		String bookNumber=request.getParameter("bookNumber");
 		Book book = new Book();
 		book.setBookName(bookName);
 		book.setBookIntroduction(desc);
@@ -98,7 +97,6 @@ public class AdminServiceImpl implements AdminService {
 		book.setBookPublish(bookPublish);
 		book.setBorrowCount(0);
 		book.setIsborrowedout(0);
-		book.setBookNumber(Integer.valueOf(bookNumber));
 		book.setBookCategory(Integer.valueOf(bookCategory));
 		SimpleDateFormat formata = new SimpleDateFormat("yy-MM-dd");
 		Date bookDate = new Date();
@@ -137,7 +135,6 @@ public class AdminServiceImpl implements AdminService {
 		String bookAuthor=request.getParameter("bookAuthor");
 		String bookPublish=request.getParameter("bookPulish");
 		String bookCategory=request.getParameter("bookCategory");
-		String bookNumber=request.getParameter("bookNumber");
 		Book book = new Book();
 		book.setBookId(Integer.valueOf(bookId));
 		book.setBookName(bookName);
@@ -146,7 +143,6 @@ public class AdminServiceImpl implements AdminService {
 		book.setBookPrice(Double.valueOf(price));
 		book.setBookAuthor(bookAuthor);
 		book.setBookPublish(bookPublish);
-		book.setBookNumber(Integer.valueOf(bookNumber));
 		book.setBookCategory(Integer.valueOf(bookCategory));
 		File dest=FileUpLoadUtil.fileUpLoad(file);
 		book.setBookImage(dest.getName());
@@ -157,18 +153,18 @@ public class AdminServiceImpl implements AdminService {
 	public PageVo selectAllUser(int pageNum) {
 		int userTotalCounts = userMapper.getUserTotalCounts();
 		PageVo pageVo = new PageVo();
-		int pageSize = 8;
+		int pageSize = 10;
 		int pageIndex = 0;
 		int totalPage = 0;
 		if (0 == pageNum) {
 			pageIndex = 1;
-			pageSize = 8;
+			pageSize = 10;
 		} else {
 			pageIndex = (pageNum - 1) * pageSize;
-			pageSize = pageNum * 8;
+			pageSize = pageNum * 10;
 		}
 		if (userTotalCounts > 0) {
-			totalPage = (userTotalCounts - 1) / 8 + 1;
+			totalPage = (userTotalCounts - 1) / 10 + 1;
 		}
 		pageVo.setPageIndex(pageIndex);
 		pageVo.setTotalPage(totalPage);
@@ -191,6 +187,31 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public Book findBookByBarCode(String barCode) {
 		return bookmapper.findBookByBarCode(barCode);
+	}
+
+	@Override
+	public PageVo autoSortScore(int pageNum) {
+		int userTotalCounts = userMapper.getUserTotalCounts();
+		PageVo pageVo = new PageVo();
+		int pageSize = 10;
+		int pageIndex = 0;
+		int totalPage = 0;
+		if (0 == pageNum) {
+			pageIndex = 1;
+			pageSize = 10;
+		} else {
+			pageIndex = (pageNum - 1) * pageSize;
+			pageSize = pageNum * 10;
+		}
+		if (userTotalCounts > 0) {
+			totalPage = (userTotalCounts - 1) / 10 + 1;
+		}
+		pageVo.setPageIndex(pageIndex);
+		pageVo.setTotalPage(totalPage);
+		pageVo.setPageSize(pageSize);
+		List<User> list = userMapper.autoSortScore(pageIndex, pageSize);
+		pageVo.setUserList(list);
+		return pageVo;
 	}
 
 

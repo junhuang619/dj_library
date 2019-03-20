@@ -1,12 +1,15 @@
 package com.djcps.library.service;
 
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import com.djcps.library.model.Admin;
 import com.djcps.library.model.Book;
+import com.djcps.library.model.User;
 import com.djcps.library.model.vo.PageVo;
 
 /**
@@ -80,5 +83,6 @@ public interface AdminService {
 	 * @return
 	 */
 	Book findBookByBarCode(String barCode);
-
+	
+	PageVo autoSortScore(int pageNum);
 }

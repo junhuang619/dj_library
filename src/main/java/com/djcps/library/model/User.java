@@ -11,6 +11,7 @@ public class User {
 	private String userPwd;
 	private String userPhone;
 	private Integer isAllowBorrow;
+	private Double score;
 	public Integer getUserId() {
 		return userId;
 	}
@@ -41,21 +42,16 @@ public class User {
 	public void setIsAllowBorrow(Integer isAllowBorrow) {
 		this.isAllowBorrow = isAllowBorrow;
 	}
+	public Double getScore() {
+		return score;
+	}
+	public void setScore(Double score) {
+		this.score = score;
+	}
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", userName=" + userName + ", userPwd=" + userPwd + ", userPhone=" + userPhone
-				+ ", isAllowBorrow=" + isAllowBorrow + "]";
-	}
-	public User(Integer userId, String userName, String userPwd, String userPhone, Integer isAllowBorrow) {
-		super();
-		this.userId = userId;
-		this.userName = userName;
-		this.userPwd = userPwd;
-		this.userPhone = userPhone;
-		this.isAllowBorrow = isAllowBorrow;
-	}
-	public User() {
-		super();
+				+ ", isAllowBorrow=" + isAllowBorrow + ", score=" + score + "]";
 	}
 	
 	
