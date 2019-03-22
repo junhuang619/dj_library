@@ -1,5 +1,6 @@
 package com.djcps.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author djsxs
@@ -8,6 +9,7 @@ package com.djcps.library.model;
 public class User {
 	private Integer userId;
 	private String userName;
+	@JsonIgnore
 	private String userPwd;
 	private String userPhone;
 	private Integer isAllowBorrow;

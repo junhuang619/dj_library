@@ -107,7 +107,7 @@ public class AdminController {
 	}
 
 	@PostMapping("/updateBook")
-	public RetResult<String> updateBookMsg(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+	public RetResult<String> updateBookMsg(@RequestParam(value="file",required=false) MultipartFile file, HttpServletRequest request) {
 		if (file.isEmpty()) {
 			return RetResponse.makeErrRsp("上传文件信息为空！");
 		}
@@ -132,7 +132,6 @@ public class AdminController {
 		}
 		return RetResponse.makeOKRsp(book);
 	}
-	
 	@RequestMapping("/userList")
 	public RetResult<PageVo> userList(@RequestParam("pageNum") int pageNum){
 		PageVo pVo =adminService.selectAllUser(pageNum);
@@ -162,6 +161,30 @@ public class AdminController {
 		PageVo pVo =adminService.autoSortScore(pageNum);
 		return RetResponse.makeOKRsp(pVo);
 	}
+	/**
+	 * huoqu 被借阅书籍的详细信息
+	 * @param pageNum
+	 * @return
+	 */
+	@RequestMapping("/getBorrowBookMsg")
+	public RetResult<PageVo> getBorrowBookMsg(@RequestParam("pageNum") int pageNum) {
+		PageVo pageVo = adminService.getBorrowBookMsg(pageNum);
+		if (pageVo == null) {
+			return RetResponse.makeErrRsp("记录查询失败！");
+		} else {
+			return RetResponse.makeOKRsp(pageVo);
+		}
+	}
+	
+	/*@RequestMapping("/selectAllBook")
+	public RetResult<PageVo> selectBorrowBookMsg(@RequestParam("pageNum") int pageNum) {
+		PageVo pageVo = adminService.selectAllBook(pageNum);
+		if (pageVo == null) {
+			return RetResponse.makeErrRsp("记录查询失败！");
+		} else {
+			return RetResponse.makeOKRsp(pageVo);
+		}
+	}*/
 	
 	/**根据phone查询管理员信息
 	 * @param phone

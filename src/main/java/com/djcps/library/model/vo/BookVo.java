@@ -14,9 +14,11 @@ public class BookVo {
     /**书名*/
     private String bookName; 
     /**起始日期*/
-    private Date beginDate;  
+    private Date beginDate;
+    /**已借天数*/
+    private Long borrowedDays;
     /**剩余天数*/
-    private Integer dateCount;
+    private Long  remainDayCount;
     /**借书用户信息*/
     private User user;
 	public Integer getBookId() {
@@ -37,11 +39,17 @@ public class BookVo {
 	public void setBeginDate(Date beginDate) {
 		this.beginDate = beginDate;
 	}
-	public Integer getDateCount() {
-		return dateCount;
+	public Long getBorrowedDays() {
+		return borrowedDays;
 	}
-	public void setDateCount(Integer dateCount) {
-		this.dateCount = dateCount;
+	public void setBorrowedDays(Long borrowedDays) {
+		this.borrowedDays = borrowedDays;
+	}
+	public Long getRemainDayCount() {
+		return remainDayCount;
+	}
+	public void setRemainDayCount(Long remainDayCount) {
+		this.remainDayCount = remainDayCount;
 	}
 	public User getUser() {
 		return user;
@@ -49,17 +57,24 @@ public class BookVo {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public BookVo(Integer bookId, String bookName, Date beginDate, Integer dateCount, User user) {
+	public BookVo(Integer bookId, String bookName, Date beginDate, Long borrowedDays, Long remainDayCount, User user) {
 		super();
 		this.bookId = bookId;
 		this.bookName = bookName;
 		this.beginDate = beginDate;
-		this.dateCount = dateCount;
+		this.borrowedDays = borrowedDays;
+		this.remainDayCount = remainDayCount;
 		this.user = user;
 	}
 	public BookVo() {
 		super();
 	}
-
+	@Override
+	public String toString() {
+		return "BookVo [bookId=" + bookId + ", bookName=" + bookName + ", beginDate=" + beginDate + ", borrowedDays="
+				+ borrowedDays + ", remainDayCount=" + remainDayCount + ", user=" + user + "]";
+	}
+	
+	
     
 }

@@ -1,5 +1,7 @@
 package com.djcps.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * @author djsxs
  *
@@ -8,7 +10,7 @@ public class Admin {
     private Integer adminId;
 
     private String adminName;
-
+    @JsonIgnore
     private String adminPwd;
 
     private String adminPhone;

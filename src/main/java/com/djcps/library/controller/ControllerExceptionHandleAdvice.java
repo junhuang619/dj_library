@@ -25,12 +25,10 @@ public class ControllerExceptionHandleAdvice {
     @ExceptionHandler
     public RetResult<Object> handler(HttpServletRequest req, HttpServletResponse res, Exception e) {
         logger.info("Restful Http请求发生异常...");
-
         if (res.getStatus() == HttpStatus.BAD_REQUEST.value()) {
             logger.info("修改返回状态值为200");
             res.setStatus(HttpStatus.OK.value());
         }
-
         if (e instanceof NullPointerException) {
             logger.error("代码00：" + e.getMessage(), e);
             return RetResponse.makeRsp(00, "发生空指针异常");

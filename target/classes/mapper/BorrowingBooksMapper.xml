@@ -47,4 +47,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 <select id="getBorrowMsgBybookId" resultMap="BookBorrowResultMap">
 	 select * from borrowingbooks where book_id =#{bookId}
 	 </select>
+	
+	 <select id="getBorrowRecordByBookId" resultMap="BookBorrowResultMap">
+	  select * from borrowingbooks where  book_id =#{bookId}
+	 </select>
+	 
+	 <select id="getBorrowingBookTotalCountsByUserId" resultType="java.lang.Integer">
+	 select count(*) from borrowingbooks where user_id=#{userId}
+	 </select>
+	 
+	 <select id="getBorrowingBookMsgByUserId" resultMap="BookBorrowResultMap">
+	 select * from borrowingbooks where user_id=#{userId} limit ${pageIndex},${pageSize}
+	 </select>
+	 
 </mapper>

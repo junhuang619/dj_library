@@ -34,4 +34,5 @@ public class BorrowingController {
 		PageVo pVo = borrowingBooksRecordService.selectAllBorrowingRecord(pageNum);
 		return RetResponse.makeOKRsp(pVo);
 	}
+	
 }

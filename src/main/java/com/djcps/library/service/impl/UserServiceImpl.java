@@ -2,6 +2,7 @@ package com.djcps.library.service.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -22,6 +24,8 @@ import com.djcps.library.model.Book;
 import com.djcps.library.model.BorrowingBooks;
 import com.djcps.library.model.User;
 import com.djcps.library.model.vo.BookVo;
+import com.djcps.library.model.vo.BorrowingBooksVo;
+import com.djcps.library.model.vo.PageVo;
 import com.djcps.library.service.UserService;
 
 /**
@@ -94,21 +98,19 @@ public class UserServiceImpl implements UserService {
 	public int userBorrowBook(HttpServletRequest request) {
 		// 获取前端传来的数据
 		String bookId = request.getParameter("bookId");
-		/** User user = (User) request.getSession().getAttribute("user"); */
+		User user = (User) request.getSession().getAttribute("user");
 		// 测试代码
-		User user = new User();
-		user.setIsAllowBorrow(1);
 		Integer isAllowBorrow = user.getIsAllowBorrow();
-		if (isAllowBorrow != 1) {
+		if (isAllowBorrow < 1) {
 			return 0;
 		}
 		BorrowingBooks borrowingBooks = new BorrowingBooks();
 		// 存储bookid
 		borrowingBooks.setBookId(Integer.valueOf(bookId));
 		// 存储用户id
-		/** books.setUserId(user.getUserId()); */
+		borrowingBooks.setUserId(user.getUserId());
 		// 改行为测试代码行
-		borrowingBooks.setUserId(1);
+		/*borrowingBooks.setUserId(1);*/
 		borrowingBooks.setIsreturn(0);
 		SimpleDateFormat format = new SimpleDateFormat("yy-MM-dd");
 		Date fDate = new Date();
@@ -130,8 +132,8 @@ public class UserServiceImpl implements UserService {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		int score = 1;
-		int row2 =userMapper.addScoreByUid(borrowingBooks.getUserId(), score);
-		if (row2<1) {
+		int row2 = userMapper.addScoreByUid(borrowingBooks.getUserId(), score);
+		if (row2 < 1) {
 			return 0;
 		}
 		int isBorrowed = 1;
@@ -146,7 +148,8 @@ public class UserServiceImpl implements UserService {
 		BorrowingBooks borrowingBooks = borrowingBooksMapper.getBorrowMsgByid(brrowingbookid);
 		int isBorrowed = 0;
 		int row = borrowingBooksMapper.retunBook(i, brrowingbookid);
-		if (row < 1) {
+		//int row1 = borrowingBooksMapper.delBorrowingRecordByisreturn();
+		if (row < 1 ) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 		}
 		int score = 3;
@@ -187,7 +190,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public BookVo getBorrowedMsg(String bookId) {
+	public BookVo getBorrowedMsg(Integer bookId) {
 		// TODO Auto-generated method stub
 		BorrowingBooks borrowingBooks = borrowingBooksMapper.getBorrowMsgBybookId(Integer.valueOf(bookId));
 		Book book = bookMapper.getBookMsgByid(Integer.valueOf(bookId));
@@ -210,16 +213,56 @@ public class UserServiceImpl implements UserService {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			int dateCount = (int) (enddate.getTime() - today.getTime()) / (24 * 60 * 60 * 1000);
-			bookVo.setDateCount(dateCount);
+			long  remainDayCount = (enddate.getTime() - today.getTime()) / (24 * 60 * 60 * 1000);
+			bookVo.setRemainDayCount(remainDayCount);
 			bookVo.setUser(userMapper.findUserById(borrowingBooks.getUserId()));
 		} else {
 			// 封装书籍的借书起始日期
 			bookVo.setBeginDate(null);
-			bookVo.setDateCount(0);
+			bookVo.setRemainDayCount(0l);
 			bookVo.setUser(null);
 		}
 		return bookVo;
+	}
+
+	@Override
+	public PageVo getBorrowBookMsg(Integer pageNum, Integer userId) {
+		Integer borrowBookTotals = borrowingBooksMapper.getBorrowingBookTotalCountsByUserId(userId);
+		PageVo pageVo =new PageVo();
+		int pageSize = 10;
+		int pageIndex = 0;
+		int totalPage = 0;
+		if (0 == pageNum) {
+			pageIndex = 1;
+			pageSize = 10;
+		} else {
+			pageIndex = (pageNum - 1) * pageSize ;
+			pageSize = pageNum * 10;
+		}
+		if (borrowBookTotals > 0) {
+			totalPage = (borrowBookTotals - 1) / 10 + 1;
+		}
+		pageVo.setPageIndex(pageIndex);
+		pageVo.setTotalPage(totalPage);
+		pageVo.setPageSize(pageSize);
+		List<BorrowingBooks> borrowingBooksList =borrowingBooksMapper.getBorrowingBookMsgByUserId(userId, pageIndex, pageSize);
+		List< BorrowingBooksVo> borrowingBooksVoList = new ArrayList<BorrowingBooksVo>();
+		for(BorrowingBooks borrowingBooks:borrowingBooksList) {
+			BorrowingBooksVo borrowingBooksVo = new BorrowingBooksVo();
+			borrowingBooksVo.setBorrowBookId(borrowingBooks.getId());
+			borrowingBooksVo.setIsReturn(borrowingBooks.getIsreturn());
+			Date beginDate=borrowingBooks.getDate();
+			Date toDay=new Date();
+			long borrowedDays=(toDay.getTime()-beginDate.getTime())/(24*3600*1000);
+			borrowingBooksVo.setBorrowedDays(borrowedDays);
+			Book book=bookMapper.getBookMsgByid(borrowingBooks.getBookId());
+			borrowingBooksVo.setDateCount(book.getDateCount());
+			borrowingBooksVo.setBookName(book.getBookName());
+			borrowingBooksVo.setBookPrice(book.getBookPrice());
+			borrowingBooksVoList.add(borrowingBooksVo);
+		}
+		pageVo.setBorrowingBooksVoList(borrowingBooksVoList);
+		return pageVo;
 	}
 
 }

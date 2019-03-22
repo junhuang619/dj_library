@@ -1,6 +1,8 @@
 package com.djcps.library.model.vo;
 
 
+import java.util.Date;
+
 import com.djcps.library.model.Book;
 import com.djcps.library.model.User;
 
@@ -10,43 +12,57 @@ import com.djcps.library.model.User;
  *
  */
 public class BorrowingBooksVo {
-    private User user;
-    /**借阅书籍 */
-    private Book book;
-    /**借书日期 */
-    private String dateOfBorrowing;
-    /**还书日期 */
-    private String dateOfReturn;
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
-
-    public void setDateOfBorrowing(String dateOfBorrowing) {
-        this.dateOfBorrowing = dateOfBorrowing;
-    }
-
-    public void setDateOfReturn(String dateOfReturn) {
-        this.dateOfReturn = dateOfReturn;
-    }
-
-    public Book getBook() {
-        return book;
-    }
-
-    public String getDateOfBorrowing() {
-        return dateOfBorrowing;
-    }
-
-    public String getDateOfReturn() {
-        return dateOfReturn;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+	private Integer borrowBookId;
+	private Integer bookId;
+	private String bookName;
+	private Double bookPrice;
+	private Integer isReturn;
+	/** 可借天数 */
+	private Integer dateCount;
+	/** 已借日期 */
+	private Long borrowedDays;
+	public Integer getBorrowBookId() {
+		return borrowBookId;
+	}
+	public void setBorrowBookId(Integer borrowBookId) {
+		this.borrowBookId = borrowBookId;
+	}
+	public String getBookName() {
+		return bookName;
+	}
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
+	public Double getBookPrice() {
+		return bookPrice;
+	}
+	public void setBookPrice(Double bookPrice) {
+		this.bookPrice = bookPrice;
+	}
+	public Integer getIsReturn() {
+		return isReturn;
+	}
+	public void setIsReturn(Integer isReturn) {
+		this.isReturn = isReturn;
+	}
+	public Integer getDateCount() {
+		return dateCount;
+	}
+	public void setDateCount(Integer dateCount) {
+		this.dateCount = dateCount;
+	}
+	public Long getBorrowedDays() {
+		return borrowedDays;
+	}
+	public void setBorrowedDays(Long borrowedDays) {
+		this.borrowedDays = borrowedDays;
+	}
+	public Integer getBookId() {
+		return bookId;
+	}
+	public void setBookId(Integer bookId) {
+		this.bookId = bookId;
+	}
+	
+	
 }

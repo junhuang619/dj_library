@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileUpLoadUtil {
 
 	public static File fileUpLoad(MultipartFile file) {
-		String filePath = "F:\\eclipse-workspace\\newworkspace\\dj_library\\src\\main\\resources\\static\\upload\\";
+		String filePath = "F:\\eclipse-workspace\\newworkspace\\dj_library\\src\\main\\resources\\static\\upload\\img\\";
 		// 获取文件名
 		String fileName = file.getOriginalFilename();
 		// 获取文件的后缀名,比如图片的jpeg,png

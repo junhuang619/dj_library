@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.djcps.library.model.Book;
 import com.djcps.library.model.User;
 import com.djcps.library.model.vo.BookVo;
+import com.djcps.library.model.vo.PageVo;
 
 /**
  * @author djsxs
@@ -76,7 +77,7 @@ public interface UserService {
 	 */
 	int continueBorrowBook(HttpServletRequest request);
 	
-	BookVo getBorrowedMsg(String bookId);
+	BookVo getBorrowedMsg(Integer bookId);
 	
-	
+	PageVo getBorrowBookMsg(Integer pageNum,Integer userId);
 }

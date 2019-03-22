@@ -85,4 +85,8 @@ public interface AdminService {
 	Book findBookByBarCode(String barCode);
 	
 	PageVo autoSortScore(int pageNum);
+	
+	PageVo getBorrowBookMsg(Integer pageNum);
+	
+	PageVo selectAllBook(int pageNum);
 }

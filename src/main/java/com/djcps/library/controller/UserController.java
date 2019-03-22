@@ -18,6 +18,7 @@ import com.djcps.library.common.RetResult;
 import com.djcps.library.model.Book;
 import com.djcps.library.model.User;
 import com.djcps.library.model.vo.BookVo;
+import com.djcps.library.model.vo.PageVo;
 import com.djcps.library.service.UserService;
 
 /**
@@ -41,9 +42,9 @@ public class UserController {
 	@RequestMapping(value = "/userRegister", method = RequestMethod.POST)
 	public RetResult<String> registerUser(@Param(value = "userName") String userName,
 			@Param(value = "password") String password, @Param(value = "phone") String phone) {
-		int row = userService.registerUser(userName,password,phone);
+		int row = userService.registerUser(userName, password, phone);
 		if (row == 0) {
-			return RetResponse.makeErrRsp("用户注册失败！");		
+			return RetResponse.makeErrRsp("用户注册失败！");
 		}
 		return RetResponse.makeOKRsp();
 	}
@@ -55,15 +56,15 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/userLogin", method = RequestMethod.POST)
-	public RetResult<Object> userLogin(@RequestParam("phone") String userPhone, 
-			@RequestParam("password") String userPwd,
-			HttpServletRequest request) {
-		User user = userService.userLogin(userPhone, userPwd,request);
+	public RetResult<Object> userLogin(@RequestParam("phone") String userPhone,
+			@RequestParam("password") String userPwd, HttpServletRequest request) {
+		User user = userService.userLogin(userPhone, userPwd, request);
 		if (null == user) {
-			return RetResponse.makeErrRsp("login failed");			
+			return RetResponse.makeErrRsp("login failed");
 		}
 		return RetResponse.makeOKRsp(user);
 	}
+
 	/**
 	 * 返回个人信息页面
 	 * 
@@ -84,15 +85,22 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping("/updateUserByphone")
-	public RetResult<String> updateUserByphone(@Param("userName") String userName, @Param("oldPassword") String oldPassword,
-			@Param("phone") String phone,@Param("password") String password) {
-		User user=userService.findUserByUserPhone(phone);
-		if (!DigestUtils.md5DigestAsHex(password.getBytes()).equals(user.getUserPhone())) {
-			return RetResponse.makeErrRsp("密码错误");
-		}
-		int row = userService.updateUser(userName, password, phone);
+	public RetResult<String> updateUserByphone(@Param("userName") String userName, @Param("phone") String phone,
+			@Param("newPassword") String newPassword) {
+		String md5Password = DigestUtils.md5DigestAsHex(newPassword.getBytes());
+		int row = userService.updateUser(userName, md5Password, phone);
 		if (row == 0) {
-			return RetResponse.makeErrRsp("update user failed");			
+			return RetResponse.makeErrRsp("update user failed");
+		}
+		return RetResponse.makeOKRsp();
+	}
+
+	@RequestMapping("/isRightPassword")
+	public RetResult<String> isRightPassword(@Param("phone") String phone, @Param("oldPassword") String oldPassword) {
+		User user = userService.findUserByUserPhone(phone);
+		String md5Password = DigestUtils.md5DigestAsHex(oldPassword.getBytes());
+		if (!md5Password.equals(user.getUserPwd())) {
+			return RetResponse.makeErrRsp("password failed");
 		}
 		return RetResponse.makeOKRsp();
 	}
@@ -106,7 +114,7 @@ public class UserController {
 	@RequestMapping("/userLogOut")
 	public void userLogOut(HttpServletRequest request) {
 		request.getSession().invalidate();
-		
+
 	}
 
 	/**
@@ -134,7 +142,7 @@ public class UserController {
 	public RetResult<String> userBorrowBook(HttpServletRequest request) {
 		int row = userService.userBorrowBook(request);
 		if (row == 0) {
-			return RetResponse.makeErrRsp("failed");			
+			return RetResponse.makeErrRsp("failed");
 		}
 		return RetResponse.makeOKRsp();
 	}
@@ -156,21 +164,22 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping("/returnBook")
-	public RetResult<String> userReturnBook(HttpServletRequest request) {
-		String borrwingId = request.getParameter("brrowingId");
+	public RetResult<String> userReturnBook(@RequestParam("borrowBookId")Integer borrowBookId) {
 		int isreturn = 1;
-		int row = userService.returnBook(Integer.valueOf(borrwingId), isreturn);
+		int row = userService.returnBook(borrowBookId, isreturn);
 		if (row == 0) {
 			return RetResponse.makeErrRsp("书籍归还失败");
 
 		}
 		return RetResponse.makeOKRsp();
 	}
-    /**
-     * 书籍续借
-     * @param borrowBookid
-     * @return
-     */
+
+	/**
+	 * 书籍续借
+	 * 
+	 * @param borrowBookid
+	 * @return
+	 */
 	@RequestMapping("/continueBorrowBook")
 	public RetResult<String> continueBorrowBook(HttpServletRequest request) {
 		int row = userService.continueBorrowBook(request);
@@ -185,10 +194,10 @@ public class UserController {
 	 * 
 	 * @return
 	 */
-	/**@RequestMapping("/userReturnBooksPage")
-	public RetResult<String> userReturnBooksPage() {
-		return RetResponse.makeOKRsp();
-	}*/
+	/**
+	 * @RequestMapping("/userReturnBooksPage") public RetResult<String>
+	 * userReturnBooksPage() { return RetResponse.makeOKRsp(); }
+	 */
 
 	/**
 	 * 按照书名进行模糊查询
@@ -199,7 +208,7 @@ public class UserController {
 		List<Book> list = userService.findBookBybookName(bookName);
 		return RetResponse.makeOKRsp(list);
 	}
-	
+
 	/**
 	 * 根据书籍的id查询该书籍的详细借阅信息
 	 * 
@@ -207,7 +216,7 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping("/getBorrowedMsgBybookId")
-	public RetResult<BookVo> getBorrowedMsgBybookId(@RequestParam("bookId") String bookId) {
+	public RetResult<BookVo> getBorrowedMsgBybookId(@RequestParam("bookId") Integer bookId) {
 		BookVo bookVo = userService.getBorrowedMsg(bookId);
 		if (bookVo == null) {
 			return RetResponse.makeErrRsp("书籍信息返回失败！");
@@ -215,7 +224,20 @@ public class UserController {
 			return RetResponse.makeOKRsp(bookVo);
 		}
 	}
-	
+
+	@RequestMapping("/getBorrowBookMsgByUserId")
+	public RetResult<PageVo> getBorrowBookMsgByUserId(@RequestParam("pageNum") int pageNum,
+			HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		PageVo pageVo = userService.getBorrowBookMsg(pageNum, user.getUserId());
+		/*Integer userId = Integer.valueOf(request.getParameter("userId"));
+		PageVo pageVo = userService.getBorrowBookMsg(pageNum, userId);*/
+		if (pageVo == null) {
+			return RetResponse.makeErrRsp("记录查询失败！");
+		} else {
+			return RetResponse.makeOKRsp(pageVo);
+		}
+	}
 	public User findUserByPhone(String phone) {
 		return userService.findUserByUserPhone(phone);
 	}

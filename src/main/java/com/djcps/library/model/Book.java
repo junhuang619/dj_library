@@ -33,8 +33,6 @@ public class Book{
     private Integer borrowCount;
     
     private String barCode;
-    
-    private Integer bookNumber;
 
 	public Integer getBookId() {
 		return bookId;
@@ -139,12 +137,6 @@ public class Book{
 	public void setBarCode(String barCode) {
 		this.barCode = barCode;
 	}
-
-	public Integer getBookNumber() {
-		return bookNumber;
-	}
-
-	public void setBookNumber(Integer bookNumber) {
-		this.bookNumber = bookNumber;
-	}
+    
+    
 }

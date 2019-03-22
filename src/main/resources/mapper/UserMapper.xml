@@ -16,7 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		parameterType="com.djcps.library.model.User"
 		keyProperty="id" useGeneratedKeys="true">
 		INSERT INTO p_user(user_name,user_pwd,user_phone,isallowborrow,score)
-		VALUES(#{userName},#{userPwd},#{userPhone},#{isAllowBorrow},,#{score})
+		VALUES(#{userName},#{userPwd},#{userPhone},#{isAllowBorrow},#{score})
 	</insert>
 	
 	 <!-- 登录功能的实现 -->
@@ -53,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="isAllowBorrowByid" parameterType="Integer">
 		 update p_user set isallowborrow=#{power} where user_id = #{userId}
 	</update>
-	
+
 	<!-- 按照读者分数进行排名 -->
 	<select id="autoSortScore" resultMap="userResultMap">
 	SELECT * FROM  p_user ORDER BY score DESC  LIMIT #{pageIndex},#{pageSize}

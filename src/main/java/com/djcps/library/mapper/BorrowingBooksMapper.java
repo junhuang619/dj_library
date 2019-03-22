@@ -52,4 +52,16 @@ public interface BorrowingBooksMapper {
 	int updatelastdateByid(BorrowingBooks books);
 	
 	BorrowingBooks getBorrowMsgBybookId(@Param("bookId")Integer bookId);
+	
+	
+	int getBorrowingBookTotalCountsByUserId(@Param("userId")Integer userId);
+	
+
+	List<BorrowingBooks> getBorrowingBookMsgByUserId(@Param("userId")Integer userId,@Param("pageIndex")int pageIndex, 
+            @Param("pageSize")int pageSize);
+
+	BorrowingBooks getBorrowRecordByBookId(@Param("bookId")Integer bookId);
+
+	int delBorrowingRecordByisreturn();
+	
 }
